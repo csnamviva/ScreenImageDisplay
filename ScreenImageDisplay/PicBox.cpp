@@ -40,4 +40,5 @@ void PicBox::OnPaint()
 	//test2
 	//test3222
 	//test3
+	//test4
 }
