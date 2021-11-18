@@ -39,4 +39,5 @@ void PicBox::OnPaint()
 	//dc.TextOut(0,0,"");
 	//test2
 	//test3222
+	//test3
 }
