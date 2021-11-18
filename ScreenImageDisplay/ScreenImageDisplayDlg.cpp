@@ -161,7 +161,7 @@ BOOL CScreenImageDisplayDlg::OnInitDialog()
 
 	return 0;
 	
-
+	// test0
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
