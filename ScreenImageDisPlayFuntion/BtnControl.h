@@ -5,7 +5,7 @@
 class BtnControl :    public CButton
 {
 public:
-	void init(int nID, int nWidth, int nHeight, CWnd* pWnd);
+	void init(int nID, CWnd* pWnd);
 	int m_nID;
 
 	CWnd* m_pParentWnd;

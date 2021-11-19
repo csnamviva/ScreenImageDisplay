@@ -26,13 +26,16 @@ ScreenSplit::~ScreenSplit()
 	}
 }
 
-void ScreenSplit::init(int nWidth, int nHeight, CWnd* pWnd, int nBtnSize)
+void ScreenSplit::Setting(int nWith, int nHeight, int nBtnSize)
 {
-	m_nWidth = nWidth;
+	m_nWidth = nWith;
 	m_nHeight = nHeight;
 	m_nBtnSize = nBtnSize;
-	m_pParentWnd = pWnd;
+}
 
+void ScreenSplit::init(CWnd* pWnd)
+{
+	m_pParentWnd = pWnd;
 
 	DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TILED;
 	char szName[100];
@@ -52,13 +55,11 @@ void ScreenSplit::init(int nWidth, int nHeight, CWnd* pWnd, int nBtnSize)
 	TCHAR strReadIni3[20] = { 0 };
 	TCHAR strReadIni4[20] = { 0 };
 
-
 	CString strPathIni = "D:\\test.ini";
-	::GetPrivateProfileString("ImageType", "1ScreenSplit", "1", strReadIni1, 20, strPathIni);
-	::GetPrivateProfileString("ImageType", "4ScreenSplit", "2", strReadIni2, 20, strPathIni);
-	::GetPrivateProfileString("ImageType", "9ScreenSplit", "3", strReadIni3, 20, strPathIni);
-	::GetPrivateProfileString("ImageType", "16ScreenSplit", "4", strReadIni4, 20, strPathIni);
-
+	::GetPrivateProfileString("1ScreenImageType", "ImageType", "1", strReadIni1, 20, strPathIni);
+	::GetPrivateProfileString("4ScreenImageType", "ImageType", "2", strReadIni2, 20, strPathIni);
+	::GetPrivateProfileString("9ScreenImageType", "ImageType", "3", strReadIni3, 20, strPathIni);
+	::GetPrivateProfileString("16ScreenImageType", "ImageType", "4", strReadIni4, 20, strPathIni);
 
 	m_n1ScreenBmData = atoi(strReadIni1);
 	m_n4ScreenBmData = atoi(strReadIni2);
@@ -201,270 +202,96 @@ void ScreenSplit::ScreenShow(CRect* pRect, int nChanel)
 
 void ScreenSplit::ImageSplit(int nChanel)
 {
+	int nChanelData = nChanel;
+	int nScreenData = 0;
+	int nImageTypeData = 0;
+
+	if (nChanel == 1) {
+		nScreenData = nChanelData / 1;
+		nImageTypeData = m_n1ScreenBmData;
+	}
+	else if (nChanel == 4)
+	{
+		nScreenData = nChanelData / 2;
+		nImageTypeData = m_n4ScreenBmData;
+	}
+	else if (nChanel == 9)
+	{
+		nScreenData = nChanelData / 3;
+		nImageTypeData = m_n9ScreenBmData;
+	}
+	else if (nChanel == 16)
+	{
+		nScreenData = nChanelData / 4;
+		nImageTypeData = m_n16ScreenBmData;
+	}
+
+	GetScreenImageData(nImageTypeData, nChanelData, nScreenData);
+}
+
+void ScreenSplit::GetScreenImageData(int nImageData, int nChanel, int nScreenData)
+{
 	CDC memDC;
 	CDC* pDC = m_pParentWnd->GetDC();
 	CBitmap bmp, * pOldBmp;
 	BITMAP bm;
 
-	if (nChanel == 1) {
-		switch (m_n1ScreenBmData)
-		{
-		case 1:
-			bmp.m_hObject = (HBITMAP)LoadImage(NULL,
-				_T("d:\\temp\\face.bmp"),
-				IMAGE_BITMAP,
-				0, 0,
-				LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_DEFAULTSIZE);
+	int nImageType = nImageData;
+	int nChanelData = nChanel;
+	int nScreenTypeData = nScreenData;
 
-			if (bmp.m_hObject == NULL) return;
-			break;
-		case 2:
-			bmp.m_hObject = (HBITMAP)LoadImage(NULL,
-				_T("d:\\temp\\2.bmp"),
-				IMAGE_BITMAP,
-				0, 0,
-				LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_DEFAULTSIZE);
+	switch (nImageType)
+	{
+	case 1:
+		bmp.m_hObject = (HBITMAP)LoadImage(NULL,
+			_T("d:\\temp\\face.bmp"),
+			IMAGE_BITMAP,
+			0, 0,
+			LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_DEFAULTSIZE);
 
-			if (bmp.m_hObject == NULL) return;
-			break;
-		case 3:
-			bmp.m_hObject = (HBITMAP)LoadImage(NULL,
-				_T("d:\\temp\\3.bmp"),
-				IMAGE_BITMAP,
-				0, 0,
-				LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_DEFAULTSIZE);
+		if (bmp.m_hObject == NULL) return;
+		break;
+	case 2:
+		bmp.m_hObject = (HBITMAP)LoadImage(NULL,
+			_T("d:\\temp\\2.bmp"),
+			IMAGE_BITMAP,
+			0, 0,
+			LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_DEFAULTSIZE);
 
-			if (bmp.m_hObject == NULL) return;
-			break;
-		case 4:
-			bmp.m_hObject = (HBITMAP)LoadImage(NULL,
-				_T("d:\\temp\\1.bmp"),
-				IMAGE_BITMAP,
-				0, 0,
-				LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_DEFAULTSIZE);
+		if (bmp.m_hObject == NULL) return;
+		break;
+	case 3:
+		bmp.m_hObject = (HBITMAP)LoadImage(NULL,
+			_T("d:\\temp\\3.bmp"),
+			IMAGE_BITMAP,
+			0, 0,
+			LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_DEFAULTSIZE);
 
-			if (bmp.m_hObject == NULL) return;
-			break;
-		}
+		if (bmp.m_hObject == NULL) return;
+		break;
+	case 4:
+		bmp.m_hObject = (HBITMAP)LoadImage(NULL,
+			_T("d:\\temp\\1.bmp"),
+			IMAGE_BITMAP,
+			0, 0,
+			LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_DEFAULTSIZE);
 
-		//2.이미지 정보를 얻기 위해서 ,여기서는 이미지 크기를 구하기 위해서   
-		bmp.GetBitmap(&bm);
-
-		//3.화면DC가 화면에 뿌리기 전에 데이터를 임시로 저장해주는 역할  
-		memDC.CreateCompatibleDC(pDC);
-
-		//4.메모리DC가 로딩된 비트맵정보를 읽어들인다.  
-		pOldBmp = memDC.SelectObject(&bmp);
-		//6.화면에 뿌린다.(메모리DC에서 화면DC로 고속복사로 뿌린다)  
-
-		pDC->StretchBlt(m_nBtnSize, 0, m_nWidth, m_nHeight
+		if (bmp.m_hObject == NULL) return;
+		break;
+	}
+	bmp.GetBitmap(&bm);
+	memDC.CreateCompatibleDC(pDC);
+	pOldBmp = memDC.SelectObject(&bmp);
+	for (int i = 0; i < nChanelData; i++) {
+		int nX = rect[i].left;
+		int nY = rect[i].top;
+		pDC->StretchBlt(nX, nY, m_nWidth / nScreenTypeData, m_nHeight / nScreenTypeData
 			, &memDC,
 			0, 0, bm.bmWidth, bm.bmHeight,
 			SRCCOPY);
-		//7.원래의 비트맵정보로 환원한다.  
-		memDC.SelectObject(pOldBmp);
-		m_pParentWnd->ReleaseDC(pDC);
 	}
-	if (nChanel == 4) {
-		switch (m_n4ScreenBmData)
-		{
-		case 1:
-			bmp.m_hObject = (HBITMAP)LoadImage(NULL,
-				_T("d:\\temp\\face.bmp"),
-				IMAGE_BITMAP,
-				0, 0,
-				LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_DEFAULTSIZE);
-
-			if (bmp.m_hObject == NULL) return;
-			break;
-		case 2:
-			bmp.m_hObject = (HBITMAP)LoadImage(NULL,
-				_T("d:\\temp\\2.bmp"),
-				IMAGE_BITMAP,
-				0, 0,
-				LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_DEFAULTSIZE);
-
-			if (bmp.m_hObject == NULL) return;
-			break;
-		case 3:
-			bmp.m_hObject = (HBITMAP)LoadImage(NULL,
-				_T("d:\\temp\\3.bmp"),
-				IMAGE_BITMAP,
-				0, 0,
-				LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_DEFAULTSIZE);
-
-			if (bmp.m_hObject == NULL) return;
-			break;
-		case 4:
-			bmp.m_hObject = (HBITMAP)LoadImage(NULL,
-				_T("d:\\temp\\1.bmp"),
-				IMAGE_BITMAP,
-				0, 0,
-				LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_DEFAULTSIZE);
-
-			if (bmp.m_hObject == NULL) return;
-			break;
-		}
-		//2.이미지 정보를 얻기 위해서 ,여기서는 이미지 크기를 구하기 위해서   
-		bmp.GetBitmap(&bm);
-
-		//3.화면DC가 화면에 뿌리기 전에 데이터를 임시로 저장해주는 역할  
-		memDC.CreateCompatibleDC(pDC);
-
-		//4.메모리DC가 로딩된 비트맵정보를 읽어들인다.  
-		pOldBmp = memDC.SelectObject(&bmp);
-
-		for (int i = 0; i < 4; i++) {
-			//5.이미지를 뿌릴 최초의 시작점을 구한다.  
-			//GetClientRect(&rect[i]);
-
-			int nX = rect[i].left;
-			int nY = rect[i].top;
-
-			//6.화면에 뿌린다.(메모리DC에서 화면DC로 고속복사로 뿌린다)  
-			pDC->StretchBlt(nX, nY,
-				m_nWidth / 2, m_nHeight / 2,
-				&memDC,
-				0, 0, bm.bmWidth, bm.bmHeight,
-				SRCCOPY);
-		}
-		//7.원래의 비트맵정보로 환원한다.  
-		memDC.SelectObject(pOldBmp);
-		m_pParentWnd->ReleaseDC(pDC);
-	}
-	if (nChanel == 9) {
-		switch (m_n9ScreenBmData)
-		{
-		case 1:
-			bmp.m_hObject = (HBITMAP)LoadImage(NULL,
-				_T("d:\\temp\\face.bmp"),
-				IMAGE_BITMAP,
-				0, 0,
-				LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_DEFAULTSIZE);
-
-			if (bmp.m_hObject == NULL) return;
-			break;
-		case 2:
-			bmp.m_hObject = (HBITMAP)LoadImage(NULL,
-				_T("d:\\temp\\2.bmp"),
-				IMAGE_BITMAP,
-				0, 0,
-				LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_DEFAULTSIZE);
-
-			if (bmp.m_hObject == NULL) return;
-			break;
-		case 3:
-			bmp.m_hObject = (HBITMAP)LoadImage(NULL,
-				_T("d:\\temp\\3.bmp"),
-				IMAGE_BITMAP,
-				0, 0,
-				LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_DEFAULTSIZE);
-
-			if (bmp.m_hObject == NULL) return;
-			break;
-		case 4:
-			bmp.m_hObject = (HBITMAP)LoadImage(NULL,
-				_T("d:\\temp\\1.bmp"),
-				IMAGE_BITMAP,
-				0, 0,
-				LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_DEFAULTSIZE);
-
-			if (bmp.m_hObject == NULL) return;
-			break;
-		}
-		//2.이미지 정보를 얻기 위해서 ,여기서는 이미지 크기를 구하기 위해서   
-		bmp.GetBitmap(&bm);
-
-		//3.화면DC가 화면에 뿌리기 전에 데이터를 임시로 저장해주는 역할  
-		memDC.CreateCompatibleDC(pDC);
-
-		//4.메모리DC가 로딩된 비트맵정보를 읽어들인다.  
-		pOldBmp = memDC.SelectObject(&bmp);
-
-		for (int i = 0; i < 9; i++) {
-			//5.이미지를 뿌릴 최초의 시작점을 구한다.  
-			//GetClientRect(&rect[i]);
-
-			int nX = rect[i].left;
-			int nY = rect[i].top;
-
-			//6.화면에 뿌린다.(메모리DC에서 화면DC로 고속복사로 뿌린다)  
-			pDC->StretchBlt(nX, nY, m_nWidth / 3, m_nHeight / 3
-				, &memDC,
-				0, 0, bm.bmWidth, bm.bmHeight,
-				SRCCOPY);
-		}
-		//7.원래의 비트맵정보로 환원한다.  
-		memDC.SelectObject(pOldBmp);
-		m_pParentWnd->ReleaseDC(pDC);
-
-	}
-	if (nChanel == 16) {
-		switch (m_n16ScreenBmData)
-		{
-		case 1:
-			bmp.m_hObject = (HBITMAP)LoadImage(NULL,
-				_T("d:\\temp\\face.bmp"),
-				IMAGE_BITMAP,
-				0, 0,
-				LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_DEFAULTSIZE);
-
-			if (bmp.m_hObject == NULL) return;
-			break;
-		case 2:
-			bmp.m_hObject = (HBITMAP)LoadImage(NULL,
-				_T("d:\\temp\\2.bmp"),
-				IMAGE_BITMAP,
-				0, 0,
-				LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_DEFAULTSIZE);
-
-			if (bmp.m_hObject == NULL) return;
-			break;
-		case 3:
-			bmp.m_hObject = (HBITMAP)LoadImage(NULL,
-				_T("d:\\temp\\3.bmp"),
-				IMAGE_BITMAP,
-				0, 0,
-				LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_DEFAULTSIZE);
-
-			if (bmp.m_hObject == NULL) return;
-			break;
-		case 4:
-			bmp.m_hObject = (HBITMAP)LoadImage(NULL,
-				_T("d:\\temp\\1.bmp"),
-				IMAGE_BITMAP,
-				0, 0,
-				LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_DEFAULTSIZE);
-
-			if (bmp.m_hObject == NULL) return;
-			break;
-		}
-		//2.이미지 정보를 얻기 위해서 ,여기서는 이미지 크기를 구하기 위해서   
-		bmp.GetBitmap(&bm);
-
-		//3.화면DC가 화면에 뿌리기 전에 데이터를 임시로 저장해주는 역할  
-		memDC.CreateCompatibleDC(pDC);
-
-		//4.메모리DC가 로딩된 비트맵정보를 읽어들인다.  
-		pOldBmp = memDC.SelectObject(&bmp);
-
-		for (int i = 0; i < 16; i++) {
-			//5.이미지를 뿌릴 최초의 시작점을 구한다.  
-			//GetClientRect(&rect[i]);
-
-			int nX = rect[i].left;
-			int nY = rect[i].top;
-
-			//6.화면에 뿌린다.(메모리DC에서 화면DC로 고속복사로 뿌린다)  
-			pDC->StretchBlt(nX, nY, m_nWidth / 4, m_nHeight / 4
-				, &memDC,
-				0, 0, bm.bmWidth, bm.bmHeight,
-				SRCCOPY);
-		}
-		//7.원래의 비트맵정보로 환원한다.  
-		memDC.SelectObject(pOldBmp);
-		m_pParentWnd->ReleaseDC(pDC);
-	}
+	memDC.SelectObject(pOldBmp);
+	m_pParentWnd->ReleaseDC(pDC);
 }
 
 

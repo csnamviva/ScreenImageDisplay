@@ -12,6 +12,12 @@
 #define BTN_ID_4 10004
 #define BTN_ID_5 10005
 
+#define ID_DISPLAY_1 32772
+#define ID_DISPLAY_2 32773
+#define ID_DISPLAY_3 32774
+#define ID_DISPLAY_4 32775
+
+
 
 // CScreenImageDisPlayFuntionDlg 대화 상자
 class CScreenImageDisPlayFuntionDlg : public CDialogEx
@@ -44,7 +50,13 @@ protected:
 public:
 	afx_msg void OnDestroy();
 	int ButtonPress(int nSplit);
+	bool m_bMenuFlag = 0;
+
+	void GetFilePath(int nItemID);
+
+	CToolBar m_wndToolBar;
 
 	BtnControl* m_BtnControl[16];
 	ScreenSplit* m_ScreenSplit;
+	afx_msg void OnMenuSelect(UINT nItemID, UINT nFlags, HMENU hSysMenu);
 };

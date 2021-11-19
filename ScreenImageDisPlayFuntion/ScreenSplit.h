@@ -32,9 +32,11 @@ public:
 	void Set4Screen();
 	void Set9Screen();
 	void Set16Screen();
-	void init(int nWith, int nHeight, CWnd* pWnd, int nBtnSize);
+	void init(CWnd* pWnd);
 	void ImageSplit(int cHanel);
 	void ScreenShow(CRect* pRect, int nChanel);
+	void Setting(int nWith, int nHeight, int nBtnSize);
+	void GetScreenImageData(int nImageData, int nChanel, int nScreenData);
 
 
 protected:

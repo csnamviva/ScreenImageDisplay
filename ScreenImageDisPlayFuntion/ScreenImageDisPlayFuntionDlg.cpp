@@ -67,6 +67,8 @@ BEGIN_MESSAGE_MAP(CScreenImageDisPlayFuntionDlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_MESSAGE(WM_MYBTN_PRESS, &CScreenImageDisPlayFuntionDlg::OnButtonPress)
 	ON_WM_DESTROY()
+
+	ON_WM_MENUSELECT()
 END_MESSAGE_MAP()
 
 
@@ -109,22 +111,7 @@ BOOL CScreenImageDisPlayFuntionDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 작은 아이콘을 설정합니다.
 
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
-	TCHAR strReadIni1[20] = { 0 };
-	TCHAR strReadIni2[20] = { 0 };
-	TCHAR strReadIni3[20] = { 0 };
-
-
-	CString strPathIni = "D:\\test.ini";
-	::GetPrivateProfileString("ScreenSize", "Width", "640", strReadIni1, 20, strPathIni);
-	::GetPrivateProfileString("ScreenSize", "Height", "480", strReadIni2, 20, strPathIni);
-
-
-	int nWidth = atoi(strReadIni1);
-	int nHeight = atoi(strReadIni2);
-
 	int nBtnSize = BTN_WIDTH;
-
-	MoveWindow(0, 0, nWidth + nBtnSize, nHeight + 50);
 
 	CString caption = _T("");
 	for (int i = 0; i < MAX_BTN; i++)
@@ -133,13 +120,13 @@ BOOL CScreenImageDisPlayFuntionDlg::OnInitDialog()
 
 		caption.Format(_T("%d SplitButton"), (i + 1) * (i + 1));
 		m_BtnControl[i]->Create(caption, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TILED, CRect(10, 10 + (50 * i), BTN_WIDTH, 50 + (50 * i)), this, BTN_ID_1 + i);
-		m_BtnControl[i]->init((i + 1) * (i + 1), nWidth, nHeight, this);
+		m_BtnControl[i]->init((i + 1) * (i + 1), this);
 	}
-
 	
-
+	//Default Value
 	this->m_ScreenSplit = new ScreenSplit();
-	m_ScreenSplit->init(nWidth, nHeight, this, nBtnSize);
+	m_ScreenSplit->init(this);
+	m_ScreenSplit->Setting(800, 600, nBtnSize);
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
@@ -205,13 +192,12 @@ void CScreenImageDisPlayFuntionDlg::OnDestroy()
 		delete m_BtnControl[i];
 	}
 	delete m_ScreenSplit;
-
 }
 
 int CScreenImageDisPlayFuntionDlg::ButtonPress(int nSplit)
 {
 	// TODO: 여기에 구현 코드 추가.
-	//TRACE("ButtonPress =%d ----------\n", nSplit);
+	//Setting ScreenSplit 1/4/9/16 button
 	switch (nSplit)
 	{
 	case 1:
@@ -228,4 +214,57 @@ int CScreenImageDisPlayFuntionDlg::ButtonPress(int nSplit)
 		break;
 	}
 	return 0;
+}
+
+void CScreenImageDisPlayFuntionDlg::OnMenuSelect(UINT nItemID, UINT nFlags, HMENU hSysMenu)
+{
+	CDialogEx::OnMenuSelect(nItemID, nFlags, hSysMenu);
+
+	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
+	//MenuBar Click 
+	if (!m_bMenuFlag)
+	{
+		GetFilePath(nItemID);
+	}
+	m_bMenuFlag = !m_bMenuFlag;
+}
+
+
+void CScreenImageDisPlayFuntionDlg::GetFilePath(int nItemID)
+{
+	//GetScreen Width/Height Size
+	CString strPathIni = "D:\\test.ini";
+	TCHAR strReadIni1[20] = { 0 };
+	TCHAR strReadIni2[20] = { 0 };
+	int nWidth = 0;
+	int nHeight = 0;
+	int nBtnSize = BTN_WIDTH;
+	switch (nItemID)
+	{
+	case ID_DISPLAY_1:
+
+		::GetPrivateProfileString("ScreenSizeType1", "Width", "640", strReadIni1, 20, strPathIni);
+		::GetPrivateProfileString("ScreenSizeType1", "Height", "480", strReadIni2, 20, strPathIni);
+		break;
+
+	case ID_DISPLAY_2:
+		::GetPrivateProfileString("ScreenSizeType2", "Width", "768", strReadIni1, 20, strPathIni);
+		::GetPrivateProfileString("ScreenSizeType2", "Height", "576", strReadIni2, 20, strPathIni);
+		break;
+
+	case ID_DISPLAY_3:
+		::GetPrivateProfileString("ScreenSizeType3", "Width", "800", strReadIni1, 20, strPathIni);
+		::GetPrivateProfileString("ScreenSizeType3", "Height", "600", strReadIni2, 20, strPathIni);
+		break;
+
+	case ID_DISPLAY_4:
+		::GetPrivateProfileString("ScreenSizeType4", "Width", "1024", strReadIni1, 20, strPathIni);
+		::GetPrivateProfileString("ScreenSizeType4", "Height", "768", strReadIni2, 20, strPathIni);
+		break;
+	}
+	nWidth = atoi(strReadIni1);
+	nHeight = atoi(strReadIni2);
+
+	m_ScreenSplit->Setting(nWidth, nHeight, nBtnSize);
+	SetWindowPos(NULL, 0, 0, nWidth + 185, nHeight + 100, SWP_NOMOVE);
 }
