@@ -117,6 +117,7 @@ void ScreenSplit::ScreenShow(CRect* pRect, int nChanel)
 		m_PicBox[i]->MoveWindow(pRectData->left, pRectData->top, Width, height);
 		m_PicBox[i]->ShowWindow(SW_SHOW);
 		m_PicBox[i]->SetPicBox(i+1);
+		TRACE("%d, %d, %d, %d\n", pRectData->left, pRectData->right, pRectData->top, pRectData->bottom);
 		pRectData++;
 	}
 	ImageSplit(m_nChanel);
