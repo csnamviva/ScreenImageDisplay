@@ -41,10 +41,11 @@ void CPicBox::OnPaint()
 	CPaintDC dc(this); // device context for painting
 					   // TODO: 여기에 메시지 처리기 코드를 추가합니다.
 					   // 그리기 메시지에 대해서는 CWnd::OnPaint()을(를) 호출하지 마십시오.
-	
-	CString str;
-	str.Format("%d", m_nScreenNum);
-	dc.TextOut(0, 0, str);
+	if (m_bScreenNumUseFlag) {
+		CString str;
+		str.Format("%d", m_nScreenNum);
+		dc.TextOut(0, 0, str);
+	}
 }
 
 void CPicBox::Setting(int nChanel)
@@ -53,10 +54,11 @@ void CPicBox::Setting(int nChanel)
 }
 
 
-void CPicBox::SetPicBox(int nScreenNum, CWnd* pWnd, int nChanel)
+void CPicBox::SetPicBox(int nScreenNum, CWnd* pWnd, int nChanel, bool bScreenNumUse)
 {
 	m_nScreenNum = nScreenNum;
 	m_pParentWnd = pWnd;
+	m_bScreenNumUseFlag = bScreenNumUse;
 }
 
 

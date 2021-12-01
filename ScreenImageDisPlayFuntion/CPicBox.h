@@ -14,11 +14,13 @@ public:
 	int m_nChanel;
 	int m_nSaveScreenNum;
 
+	bool m_bScreenNumUseFlag;
+
 	CString Str;
 	CWnd* m_pParentWnd;
 
 	//ScreenSplit m_ScreenSplit;
-	void SetPicBox(int nScreenNum, CWnd* pWnd, int nChanel);
+	void SetPicBox(int nScreenNum, CWnd* pWnd, int nChanel, bool bScreenNumUse);
 	void Setting(int Chanel);
 
 protected:

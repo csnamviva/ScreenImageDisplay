@@ -19,16 +19,18 @@ public:
 	int m_n9ScreenBmData;
 	int m_n16ScreenBmData;
 	int m_nBtnSize;
+	
 	bool bFlag;
 	//ImageData Num
 	int m_nImageTypeData = 0;
 
 
 
-	CPicBox* m_PicBox[16];
-	CPicBox m_SetPicBox;
-	CWnd* m_pParentWnd;
+	CPicBox* m_PicBox[40];
 
+	CPicBox* m_SetPicBox[400];
+	CWnd* m_pParentWnd;
+	CWnd* m_pGridWnd;
 
 	CRect rect[20];
 

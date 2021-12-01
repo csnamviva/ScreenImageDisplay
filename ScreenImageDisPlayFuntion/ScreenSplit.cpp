@@ -24,6 +24,14 @@ ScreenSplit::~ScreenSplit()
 			m_PicBox[i] = NULL;
 		}
 	}
+
+	if (m_SetPicBox != NULL) {
+		for (int i = 0; i < 400; i++) {
+			m_SetPicBox[i]->DestroyWindow();
+			delete m_SetPicBox[i];
+			m_SetPicBox[i] = NULL;
+		}
+	}
 }
 
 void ScreenSplit::Setting(int nWith, int nHeight, int nBtnSize)
@@ -31,6 +39,45 @@ void ScreenSplit::Setting(int nWith, int nHeight, int nBtnSize)
 	m_nWidth = nWith;
 	m_nHeight = nHeight;
 	m_nBtnSize = nBtnSize;
+
+//////////////////////////////////////////GridRectangle
+	CRect* pGridRectData;
+	int WidthSize = 24;
+	int HeightSize = 16;
+	int nGridRight, nGridBottom;
+	int nGridTotalHeight = 150;
+	int nGridLeft = m_nBtnSize;
+	int nGridTop = 0;
+	int nGridWidth = m_nWidth / WidthSize;
+	int	nGridHeight = nGridTotalHeight / HeightSize;
+	CRect GridRect[384];
+
+	for (int j = 0; j < HeightSize; j++) {
+		for (int i = 0; i < WidthSize; i++) {
+			nGridLeft = i * nGridWidth + m_nBtnSize;
+			nGridRight = nGridLeft + nGridWidth;
+			nGridTop = (m_nHeight + 20) + nGridHeight * j;
+			nGridBottom = nGridTop + nGridHeight;
+
+			GridRect[(WidthSize * j) + i].left = nGridLeft;
+			GridRect[(WidthSize * j) + i].right = nGridRight;
+			GridRect[(WidthSize * j) + i].top = nGridTop;
+			GridRect[(WidthSize * j) + i].bottom = nGridBottom;
+		}
+	}
+
+	pGridRectData = GridRect;
+
+	for (int i = 0; i < 384; i++) {
+		int GridWidth = pGridRectData->right - pGridRectData->left;
+		int Gridheight = pGridRectData->bottom - pGridRectData->top;
+		m_SetPicBox[i]->MoveWindow(pGridRectData->left, pGridRectData->top, GridWidth, Gridheight);
+		m_SetPicBox[i]->ShowWindow(SW_SHOW);
+
+		pGridRectData++;
+	}
+///////////////////////////////////////////////////
+
 }
 
 void ScreenSplit::init(CWnd* pWnd)
@@ -40,6 +87,7 @@ void ScreenSplit::init(CWnd* pWnd)
 	DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TILED;
 	char szName[100];
 	RECT rect = { 0,0,0,0 };
+	RECT Gridrect = { 0,0,0,0 };
 	for (int i = 0; i < 16; i++) {
 
 		m_PicBox[i] = new CPicBox();
@@ -48,7 +96,15 @@ void ScreenSplit::init(CWnd* pWnd)
 		m_PicBox[i]->Create(NULL, "1", dwStyle, rect, m_pParentWnd, 1001 + i);
 		m_PicBox[i]->ShowWindow(SW_HIDE);
 	}
+	
+	for (int i = 0; i < 400; i++) {
 
+		m_SetPicBox[i] = new CPicBox();
+
+		sprintf_s(szName, 100, "name_%d", i);
+		m_SetPicBox[i]->Create(NULL, "1", dwStyle, Gridrect, m_pParentWnd, 1001 + i);
+		m_SetPicBox[i]->ShowWindow(SW_HIDE);
+	}
 	//ImageFile Setting
 	TCHAR strReadIni1[20] = { 0 };
 	TCHAR strReadIni2[20] = { 0 };
@@ -102,6 +158,7 @@ void ScreenSplit::SetScreen(int nChanelData, int nSetScreenNum)
 			rect[m + (n * nData)].bottom = nnRectBottom;
 		}
 	}
+
 	ScreenShow(rect, nData, nSetScreenNum);
 }
 
@@ -109,6 +166,8 @@ void ScreenSplit::ScreenShow(CRect* pRect, int nChanel, int nScreenNum)
 {
 	//Set Screen Show
 	CRect* pRectData = pRect;
+	//ScreenNumUseUnUse Temp
+	bool bScreenNumUse;
 
 	//nChanel = 1/4/9/16 -> ScreenRect Num
 	int m_nChanel = nChanel * nChanel;
@@ -116,22 +175,26 @@ void ScreenSplit::ScreenShow(CRect* pRect, int nChanel, int nScreenNum)
 	for (int i = 0; i < 16; i++) {
 		m_PicBox[i]->ShowWindow(SW_HIDE);
 	}
+
+	bScreenNumUse = true;
 	for (int i = 0; i < m_nChanel; i++)
 	{
 		int Width = pRectData->right - pRectData->left;
 		int height = pRectData->bottom - pRectData->top;
 		m_PicBox[i]->MoveWindow(pRectData->left, pRectData->top, Width, height);
 		m_PicBox[i]->ShowWindow(SW_SHOW);
+		//SetScreen Num
 		if (bFlag)
 		{
-			m_PicBox[i]->SetPicBox(i + 1, this, m_nChanel);
+			m_PicBox[i]->SetPicBox(i + 1, this, m_nChanel, bScreenNumUse);
 		}
 		else
 		{
-			m_PicBox[i]->SetPicBox(nScreenNum, this, m_nChanel);
+			m_PicBox[i]->SetPicBox(nScreenNum, this, m_nChanel, bScreenNumUse);
 		}
 		pRectData++;
 	}
+
 	if (bFlag)
 	{
 		ImageSplit(nChanel);
@@ -140,7 +203,6 @@ void ScreenSplit::ScreenShow(CRect* pRect, int nChanel, int nScreenNum)
 	{
 		//Image DoubleClick
 		GetScreenImageData(m_nImageTypeData, 1, 1);
-		//bFlag = TRUE;
 	}
 }
 
