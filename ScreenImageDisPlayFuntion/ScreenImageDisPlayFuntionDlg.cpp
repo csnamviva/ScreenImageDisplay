@@ -234,12 +234,17 @@ void CScreenImageDisPlayFuntionDlg::OnMenuSelect(UINT nItemID, UINT nFlags, HMEN
 void CScreenImageDisPlayFuntionDlg::GetFilePath(int nItemID)
 {
 	//GetScreen Width/Height Size
+	TCHAR  szCurr[255];
 	CString strPathIni = "D:\\test.ini";
 	TCHAR strReadIni1[20] = { 0 };
 	TCHAR strReadIni2[20] = { 0 };
 	int nWidth = 0;
 	int nHeight = 0;
 	int nBtnSize = BTN_WIDTH;
+
+	GetCurrentDirectory(255, szCurr);    //csnam modify
+	strPathIni.Format("%s\\%s", szCurr, _T("test.ini"));
+
 
 	if (nItemID != 0) {
 		switch (nItemID)
