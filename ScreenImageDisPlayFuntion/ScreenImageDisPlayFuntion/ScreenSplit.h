@@ -19,31 +19,24 @@ public:
 	int m_n9ScreenBmData;
 	int m_n16ScreenBmData;
 	int m_nBtnSize;
-	bool bFlag;
-	//ImageData Num
-	int m_nImageTypeData = 0;
-
 
 
 	CPicBox* m_PicBox[16];
 	CPicBox m_SetPicBox;
 	CWnd* m_pParentWnd;
 
-
 	CRect rect[20];
 
-	void SetScreen(int nChanel, int nSetScreenNum);
+	void SetScreen(int nChanel);
 	void init(CWnd* pWnd);
 	void ImageSplit(int cHanel);
-	void ScreenShow(CRect* pRect, int nChanel, int nScreenNum);
+	void ScreenShow(CRect* pRect, int nChanel);
 	void Setting(int nWith, int nHeight, int nBtnSize);
 	void GetScreenImageData(int nImageData, int nChanel, int nScreenData);
 
 
 protected:
 	DECLARE_MESSAGE_MAP()
-public:
-//	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
 };
 
 

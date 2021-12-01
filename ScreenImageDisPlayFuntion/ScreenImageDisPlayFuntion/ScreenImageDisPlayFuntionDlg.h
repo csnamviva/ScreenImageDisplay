@@ -2,22 +2,15 @@
 // ScreenImageDisPlayFuntionDlg.h: 헤더 파일
 //
 #include "BtnControl.h"
-#include "CalenderDlg.h"
-#include "CMonthCalControl.h"
-#include "ListBox.h"
-
 #pragma once
 
 #define MAX_BTN 4
-#define BTN_WIDTH 210
+#define BTN_WIDTH 150
 #define BTN_ID_1 10001
 #define BTN_ID_2 10002
 #define BTN_ID_3 10003
 #define BTN_ID_4 10004
 #define BTN_ID_5 10005
-
-#define ID_MONTHCONTROL 1001
-#define ID_LISTBOX 11001
 
 #define ID_DISPLAY_1 32772
 #define ID_DISPLAY_2 32773
@@ -53,29 +46,17 @@ protected:
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
 	afx_msg LRESULT OnButtonPress(WPARAM wParam, LPARAM lParam);
-//TEST
+
 public:
 	afx_msg void OnDestroy();
 	int ButtonPress(int nSplit);
 	bool m_bMenuFlag = 0;
 
 	void GetFilePath(int nItemID);
-	
-	//int m_nChanelNum;
-	//int m_nImageData;
-	int m_nListCount;
 
-	CFont font;
+	CToolBar m_wndToolBar;
 
 	BtnControl* m_BtnControl[16];
-	CMonthCalControl* m_pCalendar;
-	ListBox* m_pListBox;
 	ScreenSplit* m_ScreenSplit;
-
-
 	afx_msg void OnMenuSelect(UINT nItemID, UINT nFlags, HMENU hSysMenu);
-	//afx_msg void OnBnClickedButton1();
-	afx_msg void OnBnClickedBtn();
-	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
-	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 };

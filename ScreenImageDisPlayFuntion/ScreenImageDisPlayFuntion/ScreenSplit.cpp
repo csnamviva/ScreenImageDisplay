@@ -67,20 +67,14 @@ void ScreenSplit::init(CWnd* pWnd)
 	m_n16ScreenBmData = atoi(strReadIni4);
 }
 
-void ScreenSplit::SetScreen(int nChanelData, int nSetScreenNum)
+void ScreenSplit::SetScreen(int nChanelData)
 {
-	int nData = 0;
-	int nSaveData = nChanelData;
 	//nData = 1/2/3/4 -> for roof Num
-	if (bFlag) {
-		nData = nSaveData;
-		m_PicBox[0]->Setting(nSaveData);
-	}
-	else
-	{
-		nData = 1;
-	}
-	
+	int nData = nChanelData;
+
+	//nChanel = 1/4/9/16 -> ScreenRect Num
+	int nChanel = nChanelData * nChanelData;
+
 	int nRectRight, nnRectBottom;
 	int nRectLeft = 0;
 	int nRectTop = 0;
@@ -102,78 +96,63 @@ void ScreenSplit::SetScreen(int nChanelData, int nSetScreenNum)
 			rect[m + (n * nData)].bottom = nnRectBottom;
 		}
 	}
-	ScreenShow(rect, nData, nSetScreenNum);
+	ScreenShow(rect, nChanel);
 }
 
-void ScreenSplit::ScreenShow(CRect* pRect, int nChanel, int nScreenNum)
+
+void ScreenSplit::ScreenShow(CRect* pRect, int nChanel)
 {
 	//Set Screen Show
 	CRect* pRectData = pRect;
-
-	//nChanel = 1/4/9/16 -> ScreenRect Num
-	int m_nChanel = nChanel * nChanel;
+	int m_nChanel = nChanel;
 
 	for (int i = 0; i < 16; i++) {
 		m_PicBox[i]->ShowWindow(SW_HIDE);
 	}
+
 	for (int i = 0; i < m_nChanel; i++)
 	{
 		int Width = pRectData->right - pRectData->left;
 		int height = pRectData->bottom - pRectData->top;
 		m_PicBox[i]->MoveWindow(pRectData->left, pRectData->top, Width, height);
 		m_PicBox[i]->ShowWindow(SW_SHOW);
-		if (bFlag)
-		{
-			m_PicBox[i]->SetPicBox(i + 1, this, m_nChanel);
-		}
-		else
-		{
-			m_PicBox[i]->SetPicBox(nScreenNum, this, m_nChanel);
-		}
+		m_PicBox[i]->SetPicBox(i+1);
+		TRACE("%d, %d, %d, %d\n", pRectData->left, pRectData->right, pRectData->top, pRectData->bottom);
 		pRectData++;
 	}
-	if (bFlag)
-	{
-		ImageSplit(nChanel);
-	}
-	else
-	{
-		//Image DoubleClick
-		GetScreenImageData(m_nImageTypeData, 1, 1);
-		//bFlag = TRUE;
-	}
+	ImageSplit(m_nChanel);
 }
 
 void ScreenSplit::ImageSplit(int nChanel)
 {
-	//Screen Divide Number 1/2/3/4
-	int nScreenData = nChanel;
+	int nChanelData = nChanel;
+	int nScreenData = 0;
+	int nImageTypeData = 0;
 
-	//Screen Chanel Num 1/4/9/16
-	int nChanelData = nScreenData * nScreenData;
-
-	//Setting ImageData Type
 	if (nChanel == 1) {
-		m_nImageTypeData = m_n1ScreenBmData;
-	}
-	else if (nChanel == 2)
-	{
-		m_nImageTypeData = m_n4ScreenBmData;
-	}
-	else if (nChanel == 3)
-	{
-		m_nImageTypeData = m_n9ScreenBmData;
+		nScreenData = nChanelData / 1;
+		nImageTypeData = m_n1ScreenBmData;
 	}
 	else if (nChanel == 4)
 	{
-		m_nImageTypeData = m_n16ScreenBmData;
+		nScreenData = nChanelData / 2;
+		nImageTypeData = m_n4ScreenBmData;
 	}
-	GetScreenImageData(m_nImageTypeData, nChanelData, nScreenData);
+	else if (nChanel == 9)
+	{
+		nScreenData = nChanelData / 3;
+		nImageTypeData = m_n9ScreenBmData;
+	}
+	else if (nChanel == 16)
+	{
+		nScreenData = nChanelData / 4;
+		nImageTypeData = m_n16ScreenBmData;
+	}
+	GetScreenImageData(nImageTypeData, nChanelData, nScreenData);
 }
 
 void ScreenSplit::GetScreenImageData(int nImageData, int nChanel, int nScreenData)
 {
-	//Setting Image Data
 	CDC memDC;
 	CDC* pDC = m_pParentWnd->GetDC();
 	CBitmap bmp, * pOldBmp;
@@ -182,7 +161,6 @@ void ScreenSplit::GetScreenImageData(int nImageData, int nChanel, int nScreenDat
 	int nImageType = nImageData;
 	int nChanelData = nChanel;
 	int nScreenTypeData = nScreenData;
-
 
 	switch (nImageType)
 	{
@@ -240,7 +218,6 @@ void ScreenSplit::GetScreenImageData(int nImageData, int nChanel, int nScreenDat
 
 
 BEGIN_MESSAGE_MAP(ScreenSplit, CWnd)
-//	ON_WM_LBUTTONDBLCLK()
 END_MESSAGE_MAP()
 
 
@@ -248,11 +225,3 @@ END_MESSAGE_MAP()
 // ScreenSplit 메시지 처리기
 
 
-
-
-//void ScreenSplit::OnLButtonDblClk(UINT nFlags, CPoint point)
-//{
-//	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
-//
-//	CWnd::OnLButtonDblClk(nFlags, point);
-//}

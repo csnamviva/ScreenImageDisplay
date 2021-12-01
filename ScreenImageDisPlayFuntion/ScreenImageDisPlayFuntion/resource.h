@@ -8,8 +8,6 @@
 #define IDD_SCREENIMAGEDISPLAYFUNTION_DIALOG 102
 #define IDR_MAINFRAME                   128
 #define IDR_MENU1                       133
-#define IDC_BUTTON1                     1004
-#define IDC_BTN                         1004
 #define d                               32771
 #define ID_DISPLAY_1                    32772
 #define ID_DISPLAY_2                    32773
@@ -20,9 +18,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        136
+#define _APS_NEXT_RESOURCE_VALUE        134
 #define _APS_NEXT_COMMAND_VALUE         32776
-#define _APS_NEXT_CONTROL_VALUE         1005
+#define _APS_NEXT_CONTROL_VALUE         1002
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

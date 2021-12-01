@@ -184,10 +184,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BtnControl.h" />
-    <ClInclude Include="CMonthCalControl.h" />
     <ClInclude Include="CPicBox.h" />
     <ClInclude Include="framework.h" />
-    <ClInclude Include="ListBox.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ScreenImageDisPlayFuntion.h" />
@@ -197,9 +195,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BtnControl.cpp" />
-    <ClCompile Include="CMonthCalControl.cpp" />
     <ClCompile Include="CPicBox.cpp" />
-    <ClCompile Include="ListBox.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

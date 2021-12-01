@@ -1,6 +1,5 @@
 #pragma once
 
-
 // CPicBox
 
 class CPicBox : public CWnd
@@ -11,10 +10,23 @@ public:
 	CPicBox();
 	virtual ~CPicBox();
 
+	int m_nScreenNum;
+	int m_nChanel;
+	int m_nSaveScreenNum;
+
+	CString Str;
+	CWnd* m_pParentWnd;
+
+	//ScreenSplit m_ScreenSplit;
+	void SetPicBox(int nScreenNum, CWnd* pWnd, int nChanel);
+	void Setting(int Chanel);
+
 protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnPaint();
+	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 };
 
 
