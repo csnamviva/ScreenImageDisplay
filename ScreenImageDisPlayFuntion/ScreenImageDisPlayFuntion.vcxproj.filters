@@ -48,6 +48,9 @@
     <ClInclude Include="ListBox.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="CDrawGridPicBox.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ScreenImageDisPlayFuntion.cpp">
@@ -72,6 +75,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="ListBox.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CDrawGridPicBox.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

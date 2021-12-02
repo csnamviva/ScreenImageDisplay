@@ -5,6 +5,8 @@
 #include "CalenderDlg.h"
 #include "CMonthCalControl.h"
 #include "ListBox.h"
+#include "CDrawGridPicBox.h"
+
 
 #pragma once
 
@@ -25,6 +27,8 @@
 #define ID_DISPLAY_4 32775
 
 
+//Use Main Dlg Dc
+#define DCGRIDVERSION
 
 // CScreenImageDisPlayFuntionDlg 대화 상자
 class CScreenImageDisPlayFuntionDlg : public CDialogEx
@@ -58,6 +62,10 @@ public:
 	afx_msg void OnDestroy();
 	int ButtonPress(int nSplit);
 	bool m_bMenuFlag = 0;
+	int nWidth;
+	int nHeight;
+
+	bool bGridUseUnUse;
 
 	void GetFilePath(int nItemID);
 	

@@ -8,7 +8,6 @@
 #define IDD_SCREENIMAGEDISPLAYFUNTION_DIALOG 102
 #define IDR_MAINFRAME                   128
 #define IDR_MENU1                       133
-#define IDC_BUTTON1                     1004
 #define IDC_BTN                         1004
 #define d                               32771
 #define ID_DISPLAY_1                    32772

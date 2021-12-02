@@ -1,6 +1,10 @@
 #pragma once
 #include "CPicBox.h"
 
+
+//Use PicBox Class GridRectangle
+//#define GRIDVERSION
+
 // ScreenSplit
 
 class ScreenSplit : public CWnd
@@ -27,12 +31,14 @@ public:
 
 
 	CPicBox* m_PicBox[40];
+	CRect GridRect[384];
 
 	CPicBox* m_SetPicBox[400];
 	CWnd* m_pParentWnd;
 	CWnd* m_pGridWnd;
 
 	CRect rect[20];
+
 
 	void SetScreen(int nChanel, int nSetScreenNum);
 	void init(CWnd* pWnd);

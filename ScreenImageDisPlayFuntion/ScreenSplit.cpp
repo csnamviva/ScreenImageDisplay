@@ -25,13 +25,13 @@ ScreenSplit::~ScreenSplit()
 		}
 	}
 
-	if (m_SetPicBox != NULL) {
-		for (int i = 0; i < 400; i++) {
-			m_SetPicBox[i]->DestroyWindow();
-			delete m_SetPicBox[i];
-			m_SetPicBox[i] = NULL;
-		}
-	}
+	//if (m_SetPicBox != NULL) {
+	//	for (int i = 0; i < 400; i++) {
+	//		m_SetPicBox[i]->DestroyWindow();
+	//		delete m_SetPicBox[i];
+	//		m_SetPicBox[i] = NULL;
+	//	}
+	//}
 }
 
 void ScreenSplit::Setting(int nWith, int nHeight, int nBtnSize)
@@ -41,6 +41,7 @@ void ScreenSplit::Setting(int nWith, int nHeight, int nBtnSize)
 	m_nBtnSize = nBtnSize;
 
 //////////////////////////////////////////GridRectangle
+#ifdef GRIDVERSION
 	CRect* pGridRectData;
 	int WidthSize = 24;
 	int HeightSize = 16;
@@ -50,7 +51,7 @@ void ScreenSplit::Setting(int nWith, int nHeight, int nBtnSize)
 	int nGridTop = 0;
 	int nGridWidth = m_nWidth / WidthSize;
 	int	nGridHeight = nGridTotalHeight / HeightSize;
-	CRect GridRect[384];
+
 
 	for (int j = 0; j < HeightSize; j++) {
 		for (int i = 0; i < WidthSize; i++) {
@@ -76,6 +77,10 @@ void ScreenSplit::Setting(int nWith, int nHeight, int nBtnSize)
 
 		pGridRectData++;
 	}
+#endif // GRIDVERSION == 1
+
+	
+	
 ///////////////////////////////////////////////////
 
 }
@@ -87,7 +92,6 @@ void ScreenSplit::init(CWnd* pWnd)
 	DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TILED;
 	char szName[100];
 	RECT rect = { 0,0,0,0 };
-	RECT Gridrect = { 0,0,0,0 };
 	for (int i = 0; i < 16; i++) {
 
 		m_PicBox[i] = new CPicBox();
@@ -102,7 +106,7 @@ void ScreenSplit::init(CWnd* pWnd)
 		m_SetPicBox[i] = new CPicBox();
 
 		sprintf_s(szName, 100, "name_%d", i);
-		m_SetPicBox[i]->Create(NULL, "1", dwStyle, Gridrect, m_pParentWnd, 1001 + i);
+		m_SetPicBox[i]->Create(NULL, "1", dwStyle, GridRect[i], m_pParentWnd, 1001 + i);
 		m_SetPicBox[i]->ShowWindow(SW_HIDE);
 	}
 	//ImageFile Setting

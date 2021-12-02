@@ -184,6 +184,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BtnControl.h" />
+    <ClInclude Include="CDrawGridPicBox.h" />
     <ClInclude Include="CMonthCalControl.h" />
     <ClInclude Include="CPicBox.h" />
     <ClInclude Include="framework.h" />
@@ -197,6 +198,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BtnControl.cpp" />
+    <ClCompile Include="CDrawGridPicBox.cpp" />
     <ClCompile Include="CMonthCalControl.cpp" />
     <ClCompile Include="CPicBox.cpp" />
     <ClCompile Include="ListBox.cpp" />

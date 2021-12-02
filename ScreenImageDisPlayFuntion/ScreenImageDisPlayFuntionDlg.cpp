@@ -8,6 +8,8 @@
 #include "ScreenImageDisPlayFuntionDlg.h"
 #include "afxdialogex.h"
 
+
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -184,8 +186,66 @@ void CScreenImageDisPlayFuntionDlg::OnPaint()
 	}
 	else
 	{
-		CDialogEx::OnPaint();
+		CPaintDC dc(this);
+#ifdef DCGRIDVERSION
+		CDC* pDC;
+		pDC = GetDC();
+		int WidthSize = 24;
+		int HeightSize = 16;
+		int nGridTotalHeight = 150;
+		int nGridLeft = BTN_WIDTH;
+		int nGridWidth = nWidth / WidthSize;
+		int	nGridHeight = nGridTotalHeight / HeightSize;
+		CRect pRect(200, 500, 1250, 968);
+
+
+		for (int j = 0; j < HeightSize; j++) {
+			for (int i = 0; i < WidthSize; i++) {
+				pDC->Rectangle(nGridLeft + (nGridWidth * i), (nHeight + 30) + (nGridHeight * j), nGridLeft + (nGridWidth * (i + 1)), (nHeight + 30) + (nGridHeight * (j + 1)));
+			}
+		}
+		ReleaseDC(pDC);
+		InvalidateRect(pRect, FALSE);
+#endif // 
+
+		
 	}
+	/*CRect* pGridRectData;
+	int WidthSize = 24;
+	int HeightSize = 16;
+	int nGridRight, nGridBottom;
+	int nGridTotalHeight = 150;
+	int nGridLeft = BTN_WIDTH;
+	int nGridTop = 0;
+	int nGridWidth = nWidth / WidthSize;
+	int	nGridHeight = nGridTotalHeight / HeightSize;
+	CRect GridRect[384];
+
+	for (int j = 0; j < HeightSize; j++) {
+		for (int i = 0; i < WidthSize; i++) {
+			nGridLeft = i * nGridWidth + BTN_WIDTH;
+			nGridRight = nGridLeft + nGridWidth;
+			nGridTop = (nHeight + 20) + nGridHeight * j;
+			nGridBottom = nGridTop + nGridHeight;
+
+			GridRect[(WidthSize * j) + i].left = nGridLeft;
+			GridRect[(WidthSize * j) + i].right = nGridRight;
+			GridRect[(WidthSize * j) + i].top = nGridTop;
+			GridRect[(WidthSize * j) + i].bottom = nGridBottom;
+		}
+	}
+	pGridRectData = GridRect;*/
+
+	//ScreenToClient(pGridRectData);
+
+	//for (int i = 0; i < 384; i++) {
+	//	int GridWidth = pGridRectData->right - pGridRectData->left;
+	//	int Gridheight = pGridRectData->bottom - pGridRectData->top;
+	//	MoveWindow(pGridRectData->left, pGridRectData->top, GridWidth, Gridheight);
+	//	ShowWindow(SW_SHOW);
+	//
+	//	pGridRectData++;
+	//}
 }
 
 // 사용자가 최소화된 창을 끄는 동안에 커서가 표시되도록 시스템에서
@@ -202,6 +262,7 @@ void CScreenImageDisPlayFuntionDlg::OnDestroy()
 	CDialogEx::OnDestroy();
 
 	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
+
 	for (int i = 0; i < MAX_BTN; i++)
 	{
 		delete m_BtnControl[i];
@@ -234,17 +295,15 @@ void CScreenImageDisPlayFuntionDlg::OnMenuSelect(UINT nItemID, UINT nFlags, HMEN
 void CScreenImageDisPlayFuntionDlg::GetFilePath(int nItemID)
 {
 	//GetScreen Width/Height Size
-	TCHAR  szCurr[255];
+	TCHAR szCurr[255];
 	CString strPathIni = "D:\\test.ini";
 	TCHAR strReadIni1[20] = { 0 };
 	TCHAR strReadIni2[20] = { 0 };
-	int nWidth = 0;
-	int nHeight = 0;
-	int nBtnSize = BTN_WIDTH;
 
-	GetCurrentDirectory(255, szCurr);    //csnam modify
+	GetCurrentDirectory(255, szCurr);
 	strPathIni.Format("%s\\%s", szCurr, _T("test.ini"));
 
+	int nBtnSize = BTN_WIDTH;
 
 	if (nItemID != 0) {
 		switch (nItemID)
