@@ -187,28 +187,30 @@ void CScreenImageDisPlayFuntionDlg::OnPaint()
 	else
 	{
 		CPaintDC dc(this);
+		//1024 x 768 DIsplay case
+		if (m_bGridUseUnUse) {
 #ifdef DCGRIDVERSION
-		CDC* pDC;
-		pDC = GetDC();
-		int WidthSize = 24;
-		int HeightSize = 16;
-		int nGridTotalHeight = 150;
-		int nGridLeft = BTN_WIDTH;
-		int nGridWidth = nWidth / WidthSize;
-		int	nGridHeight = nGridTotalHeight / HeightSize;
-		CRect pRect(200, 500, 1250, 968);
+			CDC* pDC;
+			pDC = GetDC();
+			int WidthSize = 24;
+			int HeightSize = 16;
+			int nGridTotalHeight = 150;
+			int nGridLeft = BTN_WIDTH;
+			int nGridWidth = nWidth / WidthSize;
+			int	nGridHeight = nGridTotalHeight / HeightSize;
+			CRect pRect(210, 500, 1250, 968);
 
 
-		for (int j = 0; j < HeightSize; j++) {
-			for (int i = 0; i < WidthSize; i++) {
-				pDC->Rectangle(nGridLeft + (nGridWidth * i), (nHeight + 30) + (nGridHeight * j), nGridLeft + (nGridWidth * (i + 1)), (nHeight + 30) + (nGridHeight * (j + 1)));
+			for (int j = 0; j < HeightSize; j++) {
+				for (int i = 0; i < WidthSize; i++) {
+					pDC->Rectangle(nGridLeft + (nGridWidth * i), (nHeight + 30) + (nGridHeight * j), nGridLeft + (nGridWidth * (i + 1)), (nHeight + 30) + (nGridHeight * (j + 1)));
+				}
 			}
-		}
-		ReleaseDC(pDC);
-		InvalidateRect(pRect, FALSE);
+			ReleaseDC(pDC);
+			InvalidateRect(pRect, FALSE);
 #endif // 
-
 		
+		}
 	}
 	/*CRect* pGridRectData;
 	int WidthSize = 24;
@@ -306,6 +308,7 @@ void CScreenImageDisPlayFuntionDlg::GetFilePath(int nItemID)
 	int nBtnSize = BTN_WIDTH;
 
 	if (nItemID != 0) {
+		m_bGridUseUnUse = true;
 		switch (nItemID)
 		{
 		case ID_DISPLAY_1:
@@ -376,16 +379,36 @@ void CScreenImageDisPlayFuntionDlg::OnLButtonDown(UINT nFlags, CPoint point)
 void CScreenImageDisPlayFuntionDlg::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
-	
-	RECT rect = { 220, 500,600,800 };
-		
+	CClientDC dc(this);
+	//1024 x 768 DIsplay case
+
+
+	RECT rect = { 210, 795, 1220, 940};
+	RECT pRect;
+	HBRUSH NewBrush = (HBRUSH)CreateSolidBrush(RGB(255,0,0));
+	HBRUSH OldBrush = (HBRUSH)SelectObject(dc, NewBrush);
+
 	if (PtInRect(&rect, point))
 	{
+		//::FillRect(dc, &rect, NewBrush);
+		//if (pRect != NULL) {
+		//}
+
+		point.x = ((point.x) / 42) * 42;
+		point.y = ((point.y + 4) / 9) * 9 - 9;
+		Rectangle(dc, point.x, point.y+15, point.x + 42, point.y + 8);
 		TRACE("%d %d  ============================= \n", point.x, point.y);
+		pRect = { point.x, point.y + 15, point.x + 42, point.y + 8 };
+		InvalidateRect(&pRect, FALSE);
+
+		m_bGridUseUnUse = false;
 	}
 	else {
 		TRACE("%d %d   \n", point.x, point.y);
 	}
 
+	SelectObject(dc, OldBrush);
+
+	DeleteObject(NewBrush);
 	CDialogEx::OnLButtonUp(nFlags, point);
 }

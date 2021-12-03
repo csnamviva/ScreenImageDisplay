@@ -1,6 +1,6 @@
 #pragma once
 #include "CPicBox.h"
-
+#include "CDrawGridPicBox.h"
 
 //Use PicBox Class GridRectangle
 //#define GRIDVERSION
@@ -31,9 +31,9 @@ public:
 
 
 	CPicBox* m_PicBox[40];
-	CRect GridRect[384];
+	CRect GridRect[400];
 
-	CPicBox* m_SetPicBox[400];
+	CDrawGridPicBox* m_SetPicBox[400];
 	CWnd* m_pParentWnd;
 	CWnd* m_pGridWnd;
 

@@ -25,13 +25,13 @@ ScreenSplit::~ScreenSplit()
 		}
 	}
 
-	//if (m_SetPicBox != NULL) {
-	//	for (int i = 0; i < 400; i++) {
-	//		m_SetPicBox[i]->DestroyWindow();
-	//		delete m_SetPicBox[i];
-	//		m_SetPicBox[i] = NULL;
-	//	}
-	//}
+	if (m_SetPicBox != NULL) {
+		for (int i = 0; i < 400; i++) {
+			m_SetPicBox[i]->DestroyWindow();
+			delete m_SetPicBox[i];
+			m_SetPicBox[i] = NULL;
+		}
+	}
 }
 
 void ScreenSplit::Setting(int nWith, int nHeight, int nBtnSize)
@@ -103,7 +103,7 @@ void ScreenSplit::init(CWnd* pWnd)
 	
 	for (int i = 0; i < 400; i++) {
 
-		m_SetPicBox[i] = new CPicBox();
+		m_SetPicBox[i] = new CDrawGridPicBox();
 
 		sprintf_s(szName, 100, "name_%d", i);
 		m_SetPicBox[i]->Create(NULL, "1", dwStyle, GridRect[i], m_pParentWnd, 1001 + i);

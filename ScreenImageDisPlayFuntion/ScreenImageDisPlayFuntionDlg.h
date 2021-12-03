@@ -65,7 +65,7 @@ public:
 	int nWidth;
 	int nHeight;
 
-	bool bGridUseUnUse;
+	bool m_bGridUseUnUse;
 
 	void GetFilePath(int nItemID);
 	
@@ -80,6 +80,8 @@ public:
 	ListBox* m_pListBox;
 	ScreenSplit* m_ScreenSplit;
 
+
+	void SettingGridRectangle();
 
 	afx_msg void OnMenuSelect(UINT nItemID, UINT nFlags, HMENU hSysMenu);
 	//afx_msg void OnBnClickedButton1();
