@@ -253,8 +253,8 @@ void ScreenSplit::GetScreenImageData(int nImageData, int nChanel, int nScreenDat
 	switch (nImageType)
 	{
 	case 1:
-		bmp.m_hObject = (HBITMAP)LoadImage(NULL,
-			_T("d:\\temp\\face.bmp"),
+		bmp.m_hObject = (HBITMAP)LoadImage(NULL,        //이미지도 같은 디렉토리에서 읽어오도록 수정
+			_T("d:\\temp\\face.bmp"),                      
 			IMAGE_BITMAP,
 			0, 0,
 			LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_DEFAULTSIZE);
