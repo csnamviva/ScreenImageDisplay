@@ -100,7 +100,7 @@ void ScreenSplit::init(CWnd* pWnd)
 		m_PicBox[i]->Create(NULL, "1", dwStyle, rect, m_pParentWnd, 1001 + i);
 		m_PicBox[i]->ShowWindow(SW_HIDE);
 	}
-	
+//#ifndef DCGRIDVERSION  // 막는 처리 필요
 	for (int i = 0; i < 400; i++) {
 
 		m_SetPicBox[i] = new CPicBox();
@@ -109,6 +109,7 @@ void ScreenSplit::init(CWnd* pWnd)
 		m_SetPicBox[i]->Create(NULL, "1", dwStyle, GridRect[i], m_pParentWnd, 1001 + i);
 		m_SetPicBox[i]->ShowWindow(SW_HIDE);
 	}
+//#endif
 	//ImageFile Setting
 	TCHAR strReadIni1[20] = { 0 };
 	TCHAR strReadIni2[20] = { 0 };

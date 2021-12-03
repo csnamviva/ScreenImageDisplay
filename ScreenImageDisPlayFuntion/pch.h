@@ -12,3 +12,5 @@
 
 #endif //PCH_H
 #define WM_MYBTN_PRESS  WM_USER+100
+
+//#define  GRIDVERSION  // 여기가 좋을듯  공동으로 사용하기 위해 
