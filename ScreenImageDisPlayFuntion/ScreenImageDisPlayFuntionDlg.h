@@ -65,27 +65,38 @@ public:
 	int nWidth;
 	int nHeight;
 
+	int m_nGridRectWidth;
+	int m_nGridRectHeight;
+	RECT m_Rect;
+
+
+
 	bool m_bGridUseUnUse;
 
 	void GetFilePath(int nItemID);
-	
+
 	//int m_nChanelNum;
 	//int m_nImageData;
 	int m_nListCount;
 
 	CFont font;
 
+	CRect SaveGridRect;
+
 	BtnControl* m_BtnControl[16];
 	CMonthCalControl* m_pCalendar;
 	ListBox* m_pListBox;
 	ScreenSplit* m_ScreenSplit;
 
+	HBITMAP mh_dir_image, mh_my_image;
 
-	void SettingGridRectangle();
+
 
 	afx_msg void OnMenuSelect(UINT nItemID, UINT nFlags, HMENU hSysMenu);
 	//afx_msg void OnBnClickedButton1();
 	afx_msg void OnBnClickedBtn();
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
+//	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
+	CButton m_imgBg;
 };

@@ -219,6 +219,8 @@
     <None Include="res\ScreenImageDisPlayFuntion.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\bitmap1.bmp" />
+    <Image Include="res\promain.bmp" />
     <Image Include="res\ScreenImageDisPlayFuntion.ico" />
     <Image Include="res\toolbar1.bmp" />
   </ItemGroup>
