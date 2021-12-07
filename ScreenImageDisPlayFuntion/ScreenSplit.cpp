@@ -25,13 +25,13 @@ ScreenSplit::~ScreenSplit()
 		}
 	}
 
-	//if (m_SetPicBox != NULL) {
-	//	for (int i = 0; i < 400; i++) {
-	//		m_SetPicBox[i]->DestroyWindow();
-	//		delete m_SetPicBox[i];
-	//		m_SetPicBox[i] = NULL;
-	//	}
-	//}
+	if (m_SetPicBox != NULL) {
+		for (int i = 0; i < 400; i++) {
+			m_SetPicBox[i]->DestroyWindow();
+			delete m_SetPicBox[i];
+			m_SetPicBox[i] = NULL;
+		}
+	}
 }
 
 void ScreenSplit::Setting(int nWith, int nHeight, int nBtnSize)
@@ -103,7 +103,7 @@ void ScreenSplit::init(CWnd* pWnd)
 //#ifndef DCGRIDVERSION  // 막는 처리 필요
 	for (int i = 0; i < 400; i++) {
 
-		m_SetPicBox[i] = new CPicBox();
+		m_SetPicBox[i] = new CDrawGridPicBox();
 
 		sprintf_s(szName, 100, "name_%d", i);
 		m_SetPicBox[i]->Create(NULL, "1", dwStyle, GridRect[i], m_pParentWnd, 1001 + i);
@@ -245,10 +245,29 @@ void ScreenSplit::GetScreenImageData(int nImageData, int nChanel, int nScreenDat
 	CDC* pDC = m_pParentWnd->GetDC();
 	CBitmap bmp, * pOldBmp;
 	BITMAP bm;
+	CPaintDC dc(m_pParentWnd);
 
 	int nImageType = nImageData;
 	int nChanelData = nChanel;
 	int nScreenTypeData = nScreenData;
+
+	//hbitBase = LoadBitmap(AfxGetApp()->m_hInstance, MAKEINTRESOURCE(IDB_BITMAP1));
+	//GetObject(hbitBase, sizeof(BITMAP), &m_bitmap);
+
+	//BackGround Image Change 
+	//CRect rect;
+	//GetWindowRect(&rect);
+	//
+	//HDC hMemDC = CreateCompatibleDC(dc);
+	//SetStretchBltMode(hMemDC, HALFTONE);
+	//
+	//SelectObject(hMemDC, hbitBase);
+	//
+	//StretchBlt(dc, 210, 0, m_nWidth, m_nHeight, hMemDC, 0, 0, m_bitmap.bmWidth, m_bitmap.bmHeight, SRCCOPY);
+	//DeleteDC(hMemDC);
+	//
+	//CRect Rect(210, 0, 1500, 968);
+	//InvalidateRect(Rect, FALSE);
 
 
 	switch (nImageType)

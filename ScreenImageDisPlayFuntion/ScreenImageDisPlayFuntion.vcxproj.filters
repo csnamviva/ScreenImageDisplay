@@ -98,5 +98,23 @@
     <Image Include="res\toolbar1.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
+    <Image Include="res\bitmap1.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\promain.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\split1_off.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\split4_off.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\split9.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\split16.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
   </ItemGroup>
 </Project>

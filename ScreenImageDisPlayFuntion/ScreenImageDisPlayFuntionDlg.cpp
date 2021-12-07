@@ -61,6 +61,7 @@ CScreenImageDisPlayFuntionDlg::CScreenImageDisPlayFuntionDlg(CWnd* pParent /*=nu
 void CScreenImageDisPlayFuntionDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_BTN, m_imgBg);
 }
 
 BEGIN_MESSAGE_MAP(CScreenImageDisPlayFuntionDlg, CDialogEx)
@@ -74,6 +75,8 @@ BEGIN_MESSAGE_MAP(CScreenImageDisPlayFuntionDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BTN, &CScreenImageDisPlayFuntionDlg::OnBnClickedBtn)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
+//	ON_WM_ERASEBKGND()
+ON_BN_CLICKED(IDC_BUTTON1, &CScreenImageDisPlayFuntionDlg::OnBnClickedButton1)
 END_MESSAGE_MAP()
 
 
@@ -85,6 +88,14 @@ LRESULT CScreenImageDisPlayFuntionDlg::OnButtonPress(WPARAM wParam, LPARAM lPara
 }
 
 // CScreenImageDisPlayFuntionDlg 메시지 처리기
+
+
+void CScreenImageDisPlayFuntionDlg::ShowPicture()
+{
+
+	m_BtnControl[0]->SetWindowPos(&wndTopMost, 100, 100, 200, 200, SWP_NOSIZE);
+
+}
 
 BOOL CScreenImageDisPlayFuntionDlg::OnInitDialog()
 {
@@ -118,6 +129,13 @@ BOOL CScreenImageDisPlayFuntionDlg::OnInitDialog()
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
 	int nBtnSize = BTN_WIDTH;
 
+	//HBITMAP hBit = LoadBitmap(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDB_BITMAP1));
+	//m_imgBg.SetBitmap(hBit);
+	//CRect rt;
+
+	//hbitBase = (HBITMAP)LoadImage(NULL, _T("res\\split1_off.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+
+
 	CString caption = _T("");
 	for (int i = 0; i < MAX_BTN; i++)
 	{
@@ -126,6 +144,10 @@ BOOL CScreenImageDisPlayFuntionDlg::OnInitDialog()
 		caption.Format(_T("%d SplitButton"), (i + 1) * (i + 1));
 		m_BtnControl[i]->Create(caption, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TILED, CRect(10, 10 + (50 * i), BTN_WIDTH, 50 + (50 * i)), this, BTN_ID_1 + i);
 		m_BtnControl[i]->init((i + 1), this);
+	
+		//GetClientRect(&rt);
+		//m_imgBg.SetWindowPos(NULL, 10, 10 + (50 * i), BTN_WIDTH, 50 + (50 * i), SWP_SHOWWINDOW);
+		//m_BtnControl[i]->SetBitmap(hbitBase);
 	}
 
 	this->m_pCalendar = new CMonthCalControl();
@@ -145,11 +167,17 @@ BOOL CScreenImageDisPlayFuntionDlg::OnInitDialog()
 	m_ScreenSplit->init(this);
 	m_ScreenSplit->Setting(nIniWidth, nIniHeight, nBtnSize);
 
+	//BackGround Bitmap LoadPart
+	hbitBase = LoadBitmap(AfxGetApp()->m_hInstance, MAKEINTRESOURCE(IDB_BITMAP1));
+	GetObject(hbitBase, sizeof(BITMAP), &m_bitmap);
+
+
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
 
 void CScreenImageDisPlayFuntionDlg::OnSysCommand(UINT nID, LPARAM lParam)
 {
+
 	if ((nID & 0xFFF0) == IDM_ABOUTBOX)
 	{
 		CAboutDlg dlgAbout;
@@ -167,9 +195,10 @@ void CScreenImageDisPlayFuntionDlg::OnSysCommand(UINT nID, LPARAM lParam)
 
 void CScreenImageDisPlayFuntionDlg::OnPaint()
 {
+	CPaintDC dc(this);
 	if (IsIconic())
 	{
-		CPaintDC dc(this); // 그리기를 위한 디바이스 컨텍스트입니다.
+		 // 그리기를 위한 디바이스 컨텍스트입니다.
 
 		SendMessage(WM_ICONERASEBKGND, reinterpret_cast<WPARAM>(dc.GetSafeHdc()), 0);
 
@@ -186,30 +215,57 @@ void CScreenImageDisPlayFuntionDlg::OnPaint()
 	}
 	else
 	{
-		CPaintDC dc(this);
-#ifdef DCGRIDVERSION
-		CDC* pDC;
-		pDC = GetDC();
-		int WidthSize = 24;
-		int HeightSize = 16;
-		int nGridTotalHeight = 150;
-		int nGridLeft = BTN_WIDTH;
-		int nGridWidth = nWidth / WidthSize;
-		int	nGridHeight = nGridTotalHeight / HeightSize;
-		CRect pRect(200, 500, 1250, 968);
-
-
-		for (int j = 0; j < HeightSize; j++) {
-			for (int i = 0; i < WidthSize; i++) {
-				pDC->Rectangle(nGridLeft + (nGridWidth * i), (nHeight + 30) + (nGridHeight * j), nGridLeft + (nGridWidth * (i + 1)), (nHeight + 30) + (nGridHeight * (j + 1)));
-			}
-		}
-		ReleaseDC(pDC);
-		InvalidateRect(pRect, FALSE);
-#endif // 
-
 		
+		if (m_bGridUseUnUse) {
+#ifdef DCGRIDVERSION
+			CDC* pDC;
+			pDC = GetDC();
+			int WidthSize = 24;
+			int HeightSize = 16;
+			int nGridTotalHeight = 150;
+			int nGridLeft = BTN_WIDTH;
+			int nGridWidth = nWidth / WidthSize + 10;
+			int	nGridHeight = nGridTotalHeight / HeightSize;
+			
+			m_nGridRectWidth = nGridWidth;
+			m_nGridRectHeight = nGridHeight;
+
+			for (int j = 0; j < HeightSize; j++) {
+				for (int i = 0; i < WidthSize; i++) {
+					pDC->Rectangle(nGridLeft + (nGridWidth * i), (nHeight + 30) + (nGridHeight * j), nGridLeft + (nGridWidth * (i + 1)), (nHeight + 30) + (nGridHeight * (j + 1)));
+				}
+			}
+			SaveGridRect.left = nGridLeft;
+			SaveGridRect.top = (nHeight + 30);
+			SaveGridRect.right = nGridLeft + (nGridWidth * (24));
+			SaveGridRect.bottom = (nHeight + 30) + (nGridHeight * (16));
+			ReleaseDC(pDC);
+
+			//////////////////////////////////////////////////
+		//BackGround Image Change 
+			CRect rect;
+			GetWindowRect(&rect);
+			
+			HDC hMemDC = CreateCompatibleDC(dc);
+			SetStretchBltMode(hMemDC, HALFTONE);
+			
+			SelectObject(hMemDC, hbitBase);
+			
+			//StretchBlt(dc, 210, 0, nWidth, nHeight, hMemDC, 0, 0, m_bitmap.bmWidth, m_bitmap.bmHeight, SRCCOPY);
+			DeleteDC(hMemDC);
+
+			CRect Rect(210, 0, 1500, 968);
+			InvalidateRect(Rect, FALSE);
+			//////////////////////////////////////////////////
+
+			//CRect Rect(210, 500, 1250, 968);
+			//InvalidateRect(Rect, FALSE);
+#endif
+		}
 	}
+
+	
+
 	/*CRect* pGridRectData;
 	int WidthSize = 24;
 	int HeightSize = 16;
@@ -299,13 +355,15 @@ void CScreenImageDisPlayFuntionDlg::GetFilePath(int nItemID)
 	CString strPathIni = "D:\\test.ini";
 	TCHAR strReadIni1[20] = { 0 };
 	TCHAR strReadIni2[20] = { 0 };
+	//RECT rect = { 0, 0, 0, 0 };
 
 	GetCurrentDirectory(255, szCurr);
 	strPathIni.Format("%s\\%s", szCurr, _T("test.ini"));
-
+	
 	int nBtnSize = BTN_WIDTH;
 
 	if (nItemID != 0) {
+		m_bGridUseUnUse = true;
 		switch (nItemID)
 		{
 		case ID_DISPLAY_1:
@@ -331,6 +389,7 @@ void CScreenImageDisPlayFuntionDlg::GetFilePath(int nItemID)
 		}
 		nWidth = atoi(strReadIni1);
 		nHeight = atoi(strReadIni2);
+		//m_Rect = rect;
 	}
 	//Setting Screen Size Default Value 
 	else
@@ -340,7 +399,7 @@ void CScreenImageDisPlayFuntionDlg::GetFilePath(int nItemID)
 	}
 
 	m_ScreenSplit->Setting(nWidth, nHeight, nBtnSize);
-	SetWindowPos(NULL, 0, 0, nWidth + 235, nHeight + 300, SWP_NOMOVE);
+	SetWindowPos(NULL, 0, 0, nWidth + 500, nHeight + 700, SWP_NOMOVE);
 }
 
 void CScreenImageDisPlayFuntionDlg::OnBnClickedBtn()
@@ -376,16 +435,84 @@ void CScreenImageDisPlayFuntionDlg::OnLButtonDown(UINT nFlags, CPoint point)
 void CScreenImageDisPlayFuntionDlg::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	CClientDC dc(this);
+	HBRUSH NewBrush = (HBRUSH)CreateSolidBrush(RGB(255,0,0));
+	HBRUSH OldBrush = (HBRUSH)SelectObject(dc, NewBrush);
+	int GridRectPoint = 0;
 	
-	RECT rect = { 220, 500,600,800 };
-		
-	if (PtInRect(&rect, point))
+
+	GridRectPoint = m_nGridRectHeight / 2;
+	//ScreenToClient(SaveGridRect);
+	//TEST
+	if (PtInRect(&SaveGridRect, point))
 	{
+		//switch (m_nDisplayNumber)
+		//{
+		//	case ID_DISPLAY_1:
+		//		//600*480
+		//		point.x = ((point.x) / m_nGridRectWidth) * m_nGridRectWidth;
+		//		point.y = ((point.y + GridRectPoint) / m_nGridRectHeight) * m_nGridRectHeight - m_nGridRectHeight;
+		//		Rectangle(dc, point.x+2, point.y + GridRectPoint + 2, point.x + m_nGridRectWidth + 2, point.y + m_nGridRectHeight + GridRectPoint + 1);
+		//		pRect = { point.x, point.y + m_nGridRectHeight + GridRectPoint, point.x + m_nGridRectWidth, point.y + m_nGridRectHeight };
+		//		InvalidateRect(&pRect, FALSE);
+		//	break;
+
+		//	case ID_DISPLAY_2:
+		//		//768*576
+		//		point.x = ((point.x - 12) / m_nGridRectWidth) * m_nGridRectWidth + 12;
+		//		point.y = ((point.y) / m_nGridRectHeight) * m_nGridRectHeight;
+		//		Rectangle(dc, point.x + 6, point.y + 3, point.x + 6 + m_nGridRectWidth, point.y + 3 + m_nGridRectHeight);
+		//		pRect = { point.x, point.y + m_nGridRectHeight + GridRectPoint, point.x + m_nGridRectWidth, point.y + m_nGridRectHeight };
+		//		InvalidateRect(&pRect, FALSE);
+		//		break;
+
+		//	case ID_DISPLAY_3:
+		//		//800*600
+		//		point.x = ((point.x - 12) / m_nGridRectWidth) * m_nGridRectWidth + 12;
+		//		point.y = ((point.y + GridRectPoint) / m_nGridRectHeight) * m_nGridRectHeight;
+		//		Rectangle(dc, point.x, point.y, point.x + m_nGridRectWidth, point.y + m_nGridRectHeight);
+		//		pRect = { point.x, point.y + m_nGridRectHeight + GridRectPoint, point.x + m_nGridRectWidth, point.y + m_nGridRectHeight };
+		//		InvalidateRect(&pRect, FALSE);
+		//		break;
+
+		//	case ID_DISPLAY_4:
+		//		//1024 * 768A
+		//		point.x = ((point.x) / m_nGridRectWidth) * m_nGridRectWidth;
+		//		point.y = ((point.y + GridRectPoint) / m_nGridRectHeight) * m_nGridRectHeight - m_nGridRectHeight;
+		//		Rectangle(dc, point.x, point.y + GridRectPoint + 1, point.x + m_nGridRectWidth, point.y + m_nGridRectHeight + GridRectPoint + 1);
+		//		TRACE("%d %d  ============================= \n", point.x, point.y);
+		//		pRect = { point.x, point.y + m_nGridRectHeight + GridRectPoint, point.x + m_nGridRectWidth, point.y + m_nGridRectHeight };
+		//		InvalidateRect(&pRect, FALSE);
+		//		break;
+		//}
+
+		point.x = ((point.x) / m_nGridRectWidth) * m_nGridRectWidth;
+		point.y = ((point.y + GridRectPoint) / m_nGridRectHeight) * m_nGridRectHeight - m_nGridRectHeight;
+		Rectangle(dc, point.x, point.y + GridRectPoint + 2 , point.x + m_nGridRectWidth, point.y + m_nGridRectHeight + GridRectPoint + 2);
 		TRACE("%d %d  ============================= \n", point.x, point.y);
+		//pRect = { point.x, point.y + m_nGridRectHeight + GridRectPoint, point.x + m_nGridRectWidth, point.y + m_nGridRectHeight };
+
+		CRect Rect(210, 500, 1500, 968);
+		InvalidateRect(&Rect, FALSE);
+
+
+		m_bGridUseUnUse = false;
 	}
 	else {
 		TRACE("%d %d   \n", point.x, point.y);
 	}
 
+	SelectObject(dc, OldBrush);
+
+	DeleteObject(NewBrush);
 	CDialogEx::OnLButtonUp(nFlags, point);
+}
+
+
+
+
+void CScreenImageDisPlayFuntionDlg::OnBnClickedButton1()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	ShowPicture();
 }

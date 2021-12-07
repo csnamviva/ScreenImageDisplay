@@ -219,7 +219,13 @@
     <None Include="res\ScreenImageDisPlayFuntion.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\bitmap1.bmp" />
+    <Image Include="res\promain.bmp" />
     <Image Include="res\ScreenImageDisPlayFuntion.ico" />
+    <Image Include="res\split16.bmp" />
+    <Image Include="res\split1_off.bmp" />
+    <Image Include="res\split4_off.bmp" />
+    <Image Include="res\split9.bmp" />
     <Image Include="res\toolbar1.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
