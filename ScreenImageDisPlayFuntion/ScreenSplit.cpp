@@ -245,6 +245,7 @@ void ScreenSplit::GetScreenImageData(int nImageData, int nChanel, int nScreenDat
 	//Setting Image Data
 	CDC memDC;
 	CDC* pDC = m_pParentWnd->GetDC();
+	
 	CBitmap bmp, * pOldBmp;
 	BITMAP bm;
 
@@ -273,45 +274,37 @@ void ScreenSplit::GetScreenImageData(int nImageData, int nChanel, int nScreenDat
 	//InvalidateRect(Rect, FALSE);
 
 
+	/*  임시로 지운다   PicBox으로 이동 
+	
+	
+	TCHAR szFile[255];
+	TCHAR szDir[255];
+	GetCurrentDirectory(255, szDir);
+
 	switch (nImageType)
 	{
 	case 1:
-		bmp.m_hObject = (HBITMAP)LoadImage(NULL,        //이미지도 같은 디렉토리에서 읽어오도록 수정
-			_T("d:\\temp\\face.bmp"),                      
-			IMAGE_BITMAP,
-			0, 0,
-			LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_DEFAULTSIZE);
-
-		if (bmp.m_hObject == NULL) return;
+		sprintf_s(szFile,255, "%s\\image\\%s", szDir, _T("face.bmp"));
 		break;
 	case 2:
-		bmp.m_hObject = (HBITMAP)LoadImage(NULL,
-			_T("d:\\temp\\2.bmp"),
-			IMAGE_BITMAP,
-			0, 0,
-			LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_DEFAULTSIZE);
-
-		if (bmp.m_hObject == NULL) return;
+		sprintf_s(szFile, 255, "%s\\image\\%s", szDir, _T("3.bmp"));
 		break;
 	case 3:
-		bmp.m_hObject = (HBITMAP)LoadImage(NULL,
-			_T("d:\\temp\\3.bmp"),
-			IMAGE_BITMAP,
-			0, 0,
-			LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_DEFAULTSIZE);
-
-		if (bmp.m_hObject == NULL) return;
+		sprintf_s(szFile, 255, "%s\\image\\%s", szDir, _T("3.bmp"));
 		break;
 	case 4:
-		bmp.m_hObject = (HBITMAP)LoadImage(NULL,
-			_T("d:\\temp\\1.bmp"),
-			IMAGE_BITMAP,
-			0, 0,
-			LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_DEFAULTSIZE);
-
-		if (bmp.m_hObject == NULL) return;
+		sprintf_s(szFile, 255, "%s\\image\\%s", szDir, _T("1.bmp"));
 		break;
 	}
+
+	bmp.m_hObject = (HBITMAP)LoadImage(NULL,        //이미지도 같은 디렉토리에서 읽어오도록 수정
+		szFile,
+		IMAGE_BITMAP,
+		0, 0,
+		LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_DEFAULTSIZE);
+
+	if (bmp.m_hObject == NULL) return;
+
 	bmp.GetBitmap(&bm);
 	memDC.CreateCompatibleDC(pDC);
 	pOldBmp = memDC.SelectObject(&bmp);
@@ -324,7 +317,12 @@ void ScreenSplit::GetScreenImageData(int nImageData, int nChanel, int nScreenDat
 			SRCCOPY);
 	}
 	memDC.SelectObject(pOldBmp);
-	m_pParentWnd->ReleaseDC(pDC);
+	m_pParentWnd->ReleaseDC(pDC)
+	
+	
+	*/
+
+	;
 }
 
 

@@ -251,9 +251,9 @@ void CScreenImageDisPlayFuntionDlg::OnPaint()
 			CRect rect;
 			GetWindowRect(&rect);
 			
-			//HDC hMemDC = CreateCompatibleDC(pDC->GetSafeHdc());
+			
 			CDC* pMemDC = new CDC();
-			BOOL bSuccess= pDC->CreateCompatibleDC(pDC);
+			BOOL bSuccess= pMemDC->CreateCompatibleDC(pDC);
 			if (bSuccess)
 			{
 
@@ -267,12 +267,25 @@ void CScreenImageDisPlayFuntionDlg::OnPaint()
 				pMemDC->DeleteDC();
 			}
 			
+			/*
+			* 
+			* HDC hMemDC = CreateCompatibleDC(pDC->GetSafeHdc());
+			SelectObject(hMemDC,hbitBase);
+			StretchBlt(pDC->GetSafeHdc(), 210, 0, nWidth + 200, nHeight, hMemDC, 0, 0, m_bitmap.bmWidth, m_bitmap.bmHeight, SRCCOPY);
+			
+			*/
+			
+			 
 			//CRect Rect(210, 0, 1500, 968);
 			//InvalidateRect(Rect, FALSE);
 
-			//TRACE("%s");
-			//////////////////////////////////////////////////
+			TRACE("CScreenImageDisPlayFuntionDlg::OnPaint() \n");
 
+			
+
+
+			//////////////////////////////////////////////////
+			delete pMemDC;
 			
 			ReleaseDC(pDC);
 #endif
@@ -508,8 +521,8 @@ void CScreenImageDisPlayFuntionDlg::OnLButtonUp(UINT nFlags, CPoint point)
 		TRACE("%d %d  ============================= \n", point.x, point.y);
 		//pRect = { point.x, point.y + m_nGridRectHeight + GridRectPoint, point.x + m_nGridRectWidth, point.y + m_nGridRectHeight };
 
-		CRect Rect(210, 500, 1500, 968);
-		InvalidateRect(&Rect, FALSE);
+		//CRect Rect(210, 500, 1500, 968);
+		//InvalidateRect(&Rect, FALSE);
 
 
 		m_bGridUseUnUse = false;

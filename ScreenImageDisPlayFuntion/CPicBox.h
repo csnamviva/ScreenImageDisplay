@@ -19,6 +19,11 @@ public:
 	CString Str;
 	CWnd* m_pParentWnd;
 
+
+	int m_nWidht;
+		int  m_nHeight;
+	TCHAR  m_szFile[255];
+
 	//ScreenSplit m_ScreenSplit;
 	void SetPicBox(int nScreenNum, CWnd* pWnd, int nChanel, bool bScreenNumUse);
 	void Setting(int Chanel);
