@@ -100,7 +100,7 @@ void ScreenSplit::init(CWnd* pWnd)
 		m_PicBox[i]->Create(NULL, "1", dwStyle, rect, m_pParentWnd, 1001 + i);
 		m_PicBox[i]->ShowWindow(SW_HIDE);
 	}
-	
+#ifndef DCGRIDVERSION  // 막는 처리 필요
 	for (int i = 0; i < 400; i++) {
 
 		m_SetPicBox[i] = new CDrawGridPicBox();
@@ -109,6 +109,7 @@ void ScreenSplit::init(CWnd* pWnd)
 		m_SetPicBox[i]->Create(NULL, "1", dwStyle, GridRect[i], m_pParentWnd, 1001 + i);
 		m_SetPicBox[i]->ShowWindow(SW_HIDE);
 	}
+#endif
 	//ImageFile Setting
 	TCHAR strReadIni1[20] = { 0 };
 	TCHAR strReadIni2[20] = { 0 };
@@ -129,6 +130,7 @@ void ScreenSplit::init(CWnd* pWnd)
 
 void ScreenSplit::SetScreen(int nChanelData, int nSetScreenNum)
 {
+	
 	int nData = 0;
 	int nSaveData = nChanelData;
 	//nData = 1/2/3/4 -> for roof Num
@@ -187,6 +189,7 @@ void ScreenSplit::ScreenShow(CRect* pRect, int nChanel, int nScreenNum)
 		int height = pRectData->bottom - pRectData->top;
 		m_PicBox[i]->MoveWindow(pRectData->left, pRectData->top, Width, height);
 		m_PicBox[i]->ShowWindow(SW_SHOW);
+		m_PicBox[i]->SetWindowPos(&wndTop, pRectData->left, pRectData->top, Width, height, SWP_SHOWWINDOW);
 		//SetScreen Num
 		if (bFlag)
 		{
@@ -244,7 +247,8 @@ void ScreenSplit::GetScreenImageData(int nImageData, int nChanel, int nScreenDat
 	CDC* pDC = m_pParentWnd->GetDC();
 	CBitmap bmp, * pOldBmp;
 	BITMAP bm;
-	CPaintDC dc(m_pParentWnd);
+
+	//CPaintDC dc(m_pParentWnd);
 
 	int nImageType = nImageData;
 	int nChanelData = nChanel;
@@ -319,7 +323,6 @@ void ScreenSplit::GetScreenImageData(int nImageData, int nChanel, int nScreenDat
 			0, 0, bm.bmWidth, bm.bmHeight,
 			SRCCOPY);
 	}
-	SetWindowPos(NULL, rect->left, rect->top, m_nWidth / nScreenTypeData, m_nHeight / nScreenTypeData, SWP_NOSIZE);
 	memDC.SelectObject(pOldBmp);
 	m_pParentWnd->ReleaseDC(pDC);
 }

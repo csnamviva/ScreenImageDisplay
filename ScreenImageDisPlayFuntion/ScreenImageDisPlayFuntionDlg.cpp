@@ -93,8 +93,12 @@ LRESULT CScreenImageDisPlayFuntionDlg::OnButtonPress(WPARAM wParam, LPARAM lPara
 void CScreenImageDisPlayFuntionDlg::ShowPicture()
 {
 
-	m_BtnControl[0]->SetWindowPos(NULL, 100, 100, 200, 200, SWP_NOSIZE);
+//<<<<<<< HEAD
+//	m_BtnControl[0]->SetWindowPos(NULL, 100, 100, 200, 200, SWP_NOSIZE);
+//=======
+	//m_BtnControl[0]->SetWindowPos(NULL, 100, 100, 200, 200, SWP_SHOWWINDOW);
 
+	//m_BtnControl[0]->MoveWindow(100, 100, 200, 200);
 }
 
 BOOL CScreenImageDisPlayFuntionDlg::OnInitDialog()
@@ -215,7 +219,6 @@ void CScreenImageDisPlayFuntionDlg::OnPaint()
 	}
 	else
 	{
-		
 		if (m_bGridUseUnUse) {
 #ifdef DCGRIDVERSION
 			CDC* pDC;
@@ -227,6 +230,8 @@ void CScreenImageDisPlayFuntionDlg::OnPaint()
 			int nGridWidth = nWidth / WidthSize + 10;
 			int	nGridHeight = nGridTotalHeight / HeightSize;
 			
+			CRect pRect(210, 500, 1250, 968);
+
 			m_nGridRectWidth = nGridWidth;
 			m_nGridRectHeight = nGridHeight;
 
@@ -239,27 +244,37 @@ void CScreenImageDisPlayFuntionDlg::OnPaint()
 			SaveGridRect.top = (nHeight + 30);
 			SaveGridRect.right = nGridLeft + (nGridWidth * (24));
 			SaveGridRect.bottom = (nHeight + 30) + (nGridHeight * (16));
-			ReleaseDC(pDC);
-
+			
+			//InvalidateRect(pRect, FALSE);
 			//////////////////////////////////////////////////
 		//BackGround Image Change 
 			CRect rect;
 			GetWindowRect(&rect);
 			
-			HDC hMemDC = CreateCompatibleDC(dc);
-			SetStretchBltMode(hMemDC, HALFTONE);
-			
-			SelectObject(hMemDC, hbitBase);
-			
-			//StretchBlt(dc, 210, 0, nWidth, nHeight, hMemDC, 0, 0, m_bitmap.bmWidth, m_bitmap.bmHeight, SRCCOPY);
-			DeleteDC(hMemDC);
+			//HDC hMemDC = CreateCompatibleDC(pDC->GetSafeHdc());
+			CDC* pMemDC = new CDC();
+			BOOL bSuccess= pDC->CreateCompatibleDC(pDC);
+			if (bSuccess)
+			{
 
-			CRect Rect(210, 0, 1500, 968);
-			InvalidateRect(Rect, FALSE);
+				pMemDC->SetStretchBltMode(HALFTONE);
+
+				pMemDC->SelectObject(hbitBase);
+
+				pDC->StretchBlt(210, 0, nWidth + 200, nHeight, pMemDC, 0, 0, m_bitmap.bmWidth, m_bitmap.bmHeight, SRCCOPY);
+					//::StretchBlt(pDC->GetSafeHdc(), 210, 0, nWidth + 200, nHeight, hMemDC, 0, 0, m_bitmap.bmWidth, m_bitmap.bmHeight, SRCCOPY);
+
+				pMemDC->DeleteDC();
+			}
+			
+			//CRect Rect(210, 0, 1500, 968);
+			//InvalidateRect(Rect, FALSE);
+
+			//TRACE("%s");
 			//////////////////////////////////////////////////
 
-			//CRect Rect(210, 500, 1250, 968);
-			//InvalidateRect(Rect, FALSE);
+			
+			ReleaseDC(pDC);
 #endif
 		}
 	}
@@ -331,6 +346,7 @@ void CScreenImageDisPlayFuntionDlg::OnDestroy()
 int CScreenImageDisPlayFuntionDlg::ButtonPress(int nSplit)
 {
 	//Setting ScreenSplit 1/4/9/16 button
+	//Invalidate(FALSE);
 	m_ScreenSplit->SetScreen(nSplit, 0);
 	return 0;
 }
