@@ -319,6 +319,7 @@ void ScreenSplit::GetScreenImageData(int nImageData, int nChanel, int nScreenDat
 			0, 0, bm.bmWidth, bm.bmHeight,
 			SRCCOPY);
 	}
+	SetWindowPos(NULL, rect->left, rect->top, m_nWidth / nScreenTypeData, m_nHeight / nScreenTypeData, SWP_NOSIZE);
 	memDC.SelectObject(pOldBmp);
 	m_pParentWnd->ReleaseDC(pDC);
 }

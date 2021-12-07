@@ -93,7 +93,7 @@ LRESULT CScreenImageDisPlayFuntionDlg::OnButtonPress(WPARAM wParam, LPARAM lPara
 void CScreenImageDisPlayFuntionDlg::ShowPicture()
 {
 
-	m_BtnControl[0]->SetWindowPos(&wndTopMost, 100, 100, 200, 200, SWP_NOSIZE);
+	m_BtnControl[0]->SetWindowPos(NULL, 100, 100, 200, 200, SWP_NOSIZE);
 
 }
 
