@@ -37,6 +37,10 @@ public:
 	CWnd* m_pParentWnd;
 	CWnd* m_pGridWnd;
 
+	HBITMAP hbitBase;
+	//BITMAP m_bitmap;
+
+
 	CRect rect[20];
 
 

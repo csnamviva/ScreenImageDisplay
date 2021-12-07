@@ -79,6 +79,11 @@ public:
 	//int m_nImageData;
 	int m_nListCount;
 
+	//BackGround Image
+	HBITMAP hbitBase;
+	BITMAP m_bitmap;
+
+
 	CFont font;
 
 	CRect SaveGridRect;
@@ -91,7 +96,7 @@ public:
 	HBITMAP mh_dir_image, mh_my_image;
 
 
-
+	void ShowPicture();
 	afx_msg void OnMenuSelect(UINT nItemID, UINT nFlags, HMENU hSysMenu);
 	//afx_msg void OnBnClickedButton1();
 	afx_msg void OnBnClickedBtn();
@@ -99,4 +104,5 @@ public:
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 //	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	CButton m_imgBg;
+	afx_msg void OnBnClickedButton1();
 };

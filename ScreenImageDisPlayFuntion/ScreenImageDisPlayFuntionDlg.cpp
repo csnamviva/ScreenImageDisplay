@@ -76,6 +76,7 @@ BEGIN_MESSAGE_MAP(CScreenImageDisPlayFuntionDlg, CDialogEx)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
 //	ON_WM_ERASEBKGND()
+ON_BN_CLICKED(IDC_BUTTON1, &CScreenImageDisPlayFuntionDlg::OnBnClickedButton1)
 END_MESSAGE_MAP()
 
 
@@ -87,6 +88,14 @@ LRESULT CScreenImageDisPlayFuntionDlg::OnButtonPress(WPARAM wParam, LPARAM lPara
 }
 
 // CScreenImageDisPlayFuntionDlg 메시지 처리기
+
+
+void CScreenImageDisPlayFuntionDlg::ShowPicture()
+{
+
+	m_BtnControl[0]->SetWindowPos(&wndTopMost, 100, 100, 200, 200, SWP_NOSIZE);
+
+}
 
 BOOL CScreenImageDisPlayFuntionDlg::OnInitDialog()
 {
@@ -120,11 +129,11 @@ BOOL CScreenImageDisPlayFuntionDlg::OnInitDialog()
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
 	int nBtnSize = BTN_WIDTH;
 
-	/*HBITMAP hBit = LoadBitmap(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDB_BITMAP1));
-	m_imgBg.SetBitmap(hBit);
-	CRect rt;
-	GetClientRect(&rt);
-	m_imgBg.SetWindowPos(NULL, 0, 0, rt.Width(), rt.Height(), SWP_SHOWWINDOW);*/
+	//HBITMAP hBit = LoadBitmap(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDB_BITMAP1));
+	//m_imgBg.SetBitmap(hBit);
+	//CRect rt;
+
+	//hbitBase = (HBITMAP)LoadImage(NULL, _T("res\\split1_off.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 
 
 	CString caption = _T("");
@@ -135,6 +144,10 @@ BOOL CScreenImageDisPlayFuntionDlg::OnInitDialog()
 		caption.Format(_T("%d SplitButton"), (i + 1) * (i + 1));
 		m_BtnControl[i]->Create(caption, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TILED, CRect(10, 10 + (50 * i), BTN_WIDTH, 50 + (50 * i)), this, BTN_ID_1 + i);
 		m_BtnControl[i]->init((i + 1), this);
+	
+		//GetClientRect(&rt);
+		//m_imgBg.SetWindowPos(NULL, 10, 10 + (50 * i), BTN_WIDTH, 50 + (50 * i), SWP_SHOWWINDOW);
+		//m_BtnControl[i]->SetBitmap(hbitBase);
 	}
 
 	this->m_pCalendar = new CMonthCalControl();
@@ -154,7 +167,9 @@ BOOL CScreenImageDisPlayFuntionDlg::OnInitDialog()
 	m_ScreenSplit->init(this);
 	m_ScreenSplit->Setting(nIniWidth, nIniHeight, nBtnSize);
 
-
+	//BackGround Bitmap LoadPart
+	hbitBase = LoadBitmap(AfxGetApp()->m_hInstance, MAKEINTRESOURCE(IDB_BITMAP1));
+	GetObject(hbitBase, sizeof(BITMAP), &m_bitmap);
 
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
@@ -200,8 +215,7 @@ void CScreenImageDisPlayFuntionDlg::OnPaint()
 	}
 	else
 	{
-		//CPaintDC dc(this);
-		//1024 x 768 DIsplay case
+		
 		if (m_bGridUseUnUse) {
 #ifdef DCGRIDVERSION
 			CDC* pDC;
@@ -219,7 +233,6 @@ void CScreenImageDisPlayFuntionDlg::OnPaint()
 			for (int j = 0; j < HeightSize; j++) {
 				for (int i = 0; i < WidthSize; i++) {
 					pDC->Rectangle(nGridLeft + (nGridWidth * i), (nHeight + 30) + (nGridHeight * j), nGridLeft + (nGridWidth * (i + 1)), (nHeight + 30) + (nGridHeight * (j + 1)));
-
 				}
 			}
 			SaveGridRect.left = nGridLeft;
@@ -228,31 +241,30 @@ void CScreenImageDisPlayFuntionDlg::OnPaint()
 			SaveGridRect.bottom = (nHeight + 30) + (nGridHeight * (16));
 			ReleaseDC(pDC);
 
-			CRect Rect(210, 500, 1250, 968);
+			//////////////////////////////////////////////////
+		//BackGround Image Change 
+			CRect rect;
+			GetWindowRect(&rect);
+			
+			HDC hMemDC = CreateCompatibleDC(dc);
+			SetStretchBltMode(hMemDC, HALFTONE);
+			
+			SelectObject(hMemDC, hbitBase);
+			
+			//StretchBlt(dc, 210, 0, nWidth, nHeight, hMemDC, 0, 0, m_bitmap.bmWidth, m_bitmap.bmHeight, SRCCOPY);
+			DeleteDC(hMemDC);
+
+			CRect Rect(210, 0, 1500, 968);
 			InvalidateRect(Rect, FALSE);
+			//////////////////////////////////////////////////
+
+			//CRect Rect(210, 500, 1250, 968);
+			//InvalidateRect(Rect, FALSE);
 #endif
-		
 		}
 	}
 
-/////////////////////////////////////////
-	//Dlg BackGround Add
-	//CBitmap resBack;
-	//CBitmap* old_resBack;
-	//CDC memDC;
-	//memDC.CreateCompatibleDC(&dc);
-	//
-	//resBack.LoadBitmapA(IDB_BITMAP1);
-	//old_resBack = memDC.SelectObject(&resBack);
-	//
-	//dc.BitBlt(0, 0, cx, cy, &memDC, 0, 0, SRCCOPY);
-	//memDC.SelectObject(old_resBack);
-	//resBack.DeleteObject();
-	//memDC.DeleteDC();
-	//
-	//Invalidate(FALSE);
-////////////////////////////////////////
-
+	
 
 	/*CRect* pGridRectData;
 	int WidthSize = 24;
@@ -497,3 +509,10 @@ void CScreenImageDisPlayFuntionDlg::OnLButtonUp(UINT nFlags, CPoint point)
 }
 
 
+
+
+void CScreenImageDisPlayFuntionDlg::OnBnClickedButton1()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	ShowPicture();
+}
