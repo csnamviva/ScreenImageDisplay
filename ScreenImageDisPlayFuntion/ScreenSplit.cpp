@@ -130,9 +130,8 @@ void ScreenSplit::init(CWnd* pWnd)
 
 void ScreenSplit::SetScreen(int nChanelData, int nSetScreenNum)
 {
-	
 	int nData = 0;
-	int nSaveData = nChanelData;
+	nSaveData = nChanelData;
 	//nData = 1/2/3/4 -> for roof Num
 	if (bFlag) {
 		nData = nSaveData;
@@ -183,6 +182,23 @@ void ScreenSplit::ScreenShow(CRect* pRect, int nChanel, int nScreenNum)
 	}
 
 	bScreenNumUse = true;
+
+	if (nChanel == 1) {
+		m_nImageTypeData = m_n1ScreenBmData;
+	}
+	else if (nChanel == 2)
+	{
+		m_nImageTypeData = m_n4ScreenBmData;
+	}
+	else if (nChanel == 3)
+	{
+		m_nImageTypeData = m_n9ScreenBmData;
+	}
+	else if (nChanel == 4)
+	{
+		m_nImageTypeData = m_n16ScreenBmData;
+	}
+
 	for (int i = 0; i < m_nChanel; i++)
 	{
 		int Width = pRectData->right - pRectData->left;
@@ -202,15 +218,15 @@ void ScreenSplit::ScreenShow(CRect* pRect, int nChanel, int nScreenNum)
 		pRectData++;
 	}
 
-	if (bFlag)
-	{
-		ImageSplit(nChanel);
-	}
-	else
-	{
-		//Image DoubleClick
-		GetScreenImageData(m_nImageTypeData, 1, 1);
-	}
+	//if (bFlag)
+	//{
+	//	ImageSplit(nChanel);
+	//}
+	//else
+	//{
+	//	//Image DoubleClick
+	//	GetScreenImageData(m_nImageTypeData, 1, 1);
+	//}
 }
 
 void ScreenSplit::ImageSplit(int nChanel)
@@ -222,7 +238,7 @@ void ScreenSplit::ImageSplit(int nChanel)
 	int nChanelData = nScreenData * nScreenData;
 
 	//Setting ImageData Type
-	if (nChanel == 1) {
+	/*if (nChanel == 1) {
 		m_nImageTypeData = m_n1ScreenBmData;
 	}
 	else if (nChanel == 2)
@@ -236,8 +252,8 @@ void ScreenSplit::ImageSplit(int nChanel)
 	else if (nChanel == 4)
 	{
 		m_nImageTypeData = m_n16ScreenBmData;
-	}
-	GetScreenImageData(m_nImageTypeData, nChanelData, nScreenData);
+	}*/
+	//GetScreenImageData(m_nImageTypeData, nChanelData, nScreenData);
 }
 
 void ScreenSplit::GetScreenImageData(int nImageData, int nChanel, int nScreenData)
@@ -245,6 +261,7 @@ void ScreenSplit::GetScreenImageData(int nImageData, int nChanel, int nScreenDat
 	//Setting Image Data
 	CDC memDC;
 	CDC* pDC = m_pParentWnd->GetDC();
+	
 	CBitmap bmp, * pOldBmp;
 	BITMAP bm;
 
@@ -273,45 +290,37 @@ void ScreenSplit::GetScreenImageData(int nImageData, int nChanel, int nScreenDat
 	//InvalidateRect(Rect, FALSE);
 
 
+	/*  임시로 지운다   PicBox으로 이동 
+	
+	
+	TCHAR szFile[255];
+	TCHAR szDir[255];
+	GetCurrentDirectory(255, szDir);
+
 	switch (nImageType)
 	{
 	case 1:
-		bmp.m_hObject = (HBITMAP)LoadImage(NULL,        //이미지도 같은 디렉토리에서 읽어오도록 수정
-			_T("d:\\temp\\face.bmp"),                      
-			IMAGE_BITMAP,
-			0, 0,
-			LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_DEFAULTSIZE);
-
-		if (bmp.m_hObject == NULL) return;
+		sprintf_s(szFile,255, "%s\\image\\%s", szDir, _T("face.bmp"));
 		break;
 	case 2:
-		bmp.m_hObject = (HBITMAP)LoadImage(NULL,
-			_T("d:\\temp\\2.bmp"),
-			IMAGE_BITMAP,
-			0, 0,
-			LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_DEFAULTSIZE);
-
-		if (bmp.m_hObject == NULL) return;
+		sprintf_s(szFile, 255, "%s\\image\\%s", szDir, _T("3.bmp"));
 		break;
 	case 3:
-		bmp.m_hObject = (HBITMAP)LoadImage(NULL,
-			_T("d:\\temp\\3.bmp"),
-			IMAGE_BITMAP,
-			0, 0,
-			LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_DEFAULTSIZE);
-
-		if (bmp.m_hObject == NULL) return;
+		sprintf_s(szFile, 255, "%s\\image\\%s", szDir, _T("3.bmp"));
 		break;
 	case 4:
-		bmp.m_hObject = (HBITMAP)LoadImage(NULL,
-			_T("d:\\temp\\1.bmp"),
-			IMAGE_BITMAP,
-			0, 0,
-			LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_DEFAULTSIZE);
-
-		if (bmp.m_hObject == NULL) return;
+		sprintf_s(szFile, 255, "%s\\image\\%s", szDir, _T("1.bmp"));
 		break;
 	}
+
+	bmp.m_hObject = (HBITMAP)LoadImage(NULL,        //이미지도 같은 디렉토리에서 읽어오도록 수정
+		szFile,
+		IMAGE_BITMAP,
+		0, 0,
+		LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_DEFAULTSIZE);
+
+	if (bmp.m_hObject == NULL) return;
+
 	bmp.GetBitmap(&bm);
 	memDC.CreateCompatibleDC(pDC);
 	pOldBmp = memDC.SelectObject(&bmp);
@@ -324,7 +333,10 @@ void ScreenSplit::GetScreenImageData(int nImageData, int nChanel, int nScreenDat
 			SRCCOPY);
 	}
 	memDC.SelectObject(pOldBmp);
-	m_pParentWnd->ReleaseDC(pDC);
+	m_pParentWnd->ReleaseDC(pDC)
+	
+	
+	*/
 }
 
 
