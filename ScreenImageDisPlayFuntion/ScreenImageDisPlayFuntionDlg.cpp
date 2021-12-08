@@ -253,7 +253,7 @@ void CScreenImageDisPlayFuntionDlg::OnPaint()
 			
 			//HDC hMemDC = CreateCompatibleDC(pDC->GetSafeHdc());
 			CDC* pMemDC = new CDC();
-			BOOL bSuccess= pDC->CreateCompatibleDC(pDC);
+			BOOL bSuccess= pDC->CreateCompatibleDC(pMemDC);
 			if (bSuccess)
 			{
 
