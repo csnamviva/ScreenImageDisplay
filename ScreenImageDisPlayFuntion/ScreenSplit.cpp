@@ -130,9 +130,8 @@ void ScreenSplit::init(CWnd* pWnd)
 
 void ScreenSplit::SetScreen(int nChanelData, int nSetScreenNum)
 {
-	
 	int nData = 0;
-	int nSaveData = nChanelData;
+	nSaveData = nChanelData;
 	//nData = 1/2/3/4 -> for roof Num
 	if (bFlag) {
 		nData = nSaveData;
@@ -183,6 +182,23 @@ void ScreenSplit::ScreenShow(CRect* pRect, int nChanel, int nScreenNum)
 	}
 
 	bScreenNumUse = true;
+
+	if (nChanel == 1) {
+		m_nImageTypeData = m_n1ScreenBmData;
+	}
+	else if (nChanel == 2)
+	{
+		m_nImageTypeData = m_n4ScreenBmData;
+	}
+	else if (nChanel == 3)
+	{
+		m_nImageTypeData = m_n9ScreenBmData;
+	}
+	else if (nChanel == 4)
+	{
+		m_nImageTypeData = m_n16ScreenBmData;
+	}
+
 	for (int i = 0; i < m_nChanel; i++)
 	{
 		int Width = pRectData->right - pRectData->left;
@@ -202,15 +218,15 @@ void ScreenSplit::ScreenShow(CRect* pRect, int nChanel, int nScreenNum)
 		pRectData++;
 	}
 
-	if (bFlag)
-	{
-		ImageSplit(nChanel);
-	}
-	else
-	{
-		//Image DoubleClick
-		GetScreenImageData(m_nImageTypeData, 1, 1);
-	}
+	//if (bFlag)
+	//{
+	//	ImageSplit(nChanel);
+	//}
+	//else
+	//{
+	//	//Image DoubleClick
+	//	GetScreenImageData(m_nImageTypeData, 1, 1);
+	//}
 }
 
 void ScreenSplit::ImageSplit(int nChanel)
@@ -222,7 +238,7 @@ void ScreenSplit::ImageSplit(int nChanel)
 	int nChanelData = nScreenData * nScreenData;
 
 	//Setting ImageData Type
-	if (nChanel == 1) {
+	/*if (nChanel == 1) {
 		m_nImageTypeData = m_n1ScreenBmData;
 	}
 	else if (nChanel == 2)
@@ -236,8 +252,8 @@ void ScreenSplit::ImageSplit(int nChanel)
 	else if (nChanel == 4)
 	{
 		m_nImageTypeData = m_n16ScreenBmData;
-	}
-	GetScreenImageData(m_nImageTypeData, nChanelData, nScreenData);
+	}*/
+	//GetScreenImageData(m_nImageTypeData, nChanelData, nScreenData);
 }
 
 void ScreenSplit::GetScreenImageData(int nImageData, int nChanel, int nScreenData)
@@ -321,8 +337,6 @@ void ScreenSplit::GetScreenImageData(int nImageData, int nChanel, int nScreenDat
 	
 	
 	*/
-
-	;
 }
 
 

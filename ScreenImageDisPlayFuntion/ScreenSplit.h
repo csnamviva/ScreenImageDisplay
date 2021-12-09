@@ -23,7 +23,10 @@ public:
 	int m_n9ScreenBmData;
 	int m_n16ScreenBmData;
 	int m_nBtnSize;
-	
+	//1, 2, 3, 4
+	int nSaveData;
+
+
 	bool bFlag;
 	//ImageData Num
 	int m_nImageTypeData = 0;

@@ -10,9 +10,15 @@ public:
 	CPicBox();
 	virtual ~CPicBox();
 
+	int m_nImageType;
 	int m_nScreenNum;
 	int m_nChanel;
 	int m_nSaveScreenNum;
+	int m_nWidth;
+	int m_nHeight;
+	//1, 2, ,3, 4
+	int m_nChanelData;
+
 
 	bool m_bScreenNumUseFlag;
 
@@ -20,8 +26,6 @@ public:
 	CWnd* m_pParentWnd;
 
 
-	int m_nWidht;
-		int  m_nHeight;
 	TCHAR  m_szFile[255];
 
 	//ScreenSplit m_ScreenSplit;
